@@ -1,0 +1,10 @@
+flask
+python-dotenv
+gunicorn
+requests
+pyotp
+schedule
+email-validator
+py3dns
+passlib
+argon2-cffi
