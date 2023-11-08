@@ -6,6 +6,7 @@ import json
 import schedule
 import time
 import db
+import website
 
 
 app = Flask(__name__)
@@ -31,7 +32,7 @@ def index():
     # Get website data
     data = db.get_website_data(host)
     # Render as HTML
-    return render_template_string(data)
+    return website.render(data)
 
 
 @app.route('/<path:path>')
