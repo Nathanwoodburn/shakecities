@@ -37,13 +37,6 @@ def index():
 
 @app.route('/<path:path>')
 def catch_all(path):
-    # If file exists, load it
-    if os.path.isfile('templates/' + path):
-        return render_template(path)
-    
-    # Try with .html
-    if os.path.isfile('templates/' + path + '.html'):
-        return render_template(path + '.html')
     return redirect('/') # 404 catch all
 
 # 404 catch all

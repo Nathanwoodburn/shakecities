@@ -2,4 +2,7 @@ from flask import Flask, make_response, redirect, render_template_string, reques
 
 
 def render(data):
+    if data == "":
+        return "No data found for this domain"
+    
     return render_template_string(data)
