@@ -24,8 +24,9 @@ def error(message):
 @app.route('/')
 def index():
     host = request.host
-    if len(host.split('.')) < 2:
+    if len(host.split('.')) != 2:
         return error('Invalid domain')
+    host = host.split('.')[0]
     
     # Get website data
     data = db.get_website_data(host)

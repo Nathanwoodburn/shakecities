@@ -23,15 +23,5 @@ def get_website_data(domain):
     connection.close()
     
     if data == []:
-        # Create new entry
-        connection = mysql.connector.connect(**dbargs)
-        cursor = connection.cursor()
-        cursor.execute("""
-            INSERT INTO site (domain, data)
-            VALUES (%s, %s)
-        """, (domain, ""))
-        connection.commit()
-        cursor.close()
-        connection.close()
         return ""
     return data[0][2]
