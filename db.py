@@ -27,8 +27,7 @@ def check_tables():
             token VARCHAR(255) NOT NULL,
             PRIMARY KEY (id)
         )
-    """)
-    
+    """)    
     cursor.close()
     connection.close()
 
