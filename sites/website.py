@@ -1,5 +1,6 @@
 from flask import Flask, make_response, redirect, render_template_string, request, jsonify, render_template, send_from_directory
 from bs4 import BeautifulSoup
+import html_sanitizer
 
 def render(data):
     if data == "":
@@ -10,7 +11,9 @@ def render(data):
         for script in soup.find_all('script'):
             script.extract()
         modified_data = str(soup)
-        return render_template_string(modified_data)
+        default_settings = dict(html_sanitizer.sanitizer.DEFAULT_SETTINGS)
+        sanitizer = html_sanitizer.Sanitizer(default_settings)        
+        return render_template_string(str(sanitizer.sanitize(modified_data)))
 
 
     except Exception as e:
