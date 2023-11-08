@@ -5,8 +5,7 @@ import requests
 import json
 import schedule
 import time
-from email_validator import validate_email, EmailNotValidError
-import accounts
+
 
 app = Flask(__name__)
 dotenv.load_dotenv()

@@ -26,12 +26,8 @@ def verify_password(password, hashed_password):
 def generate_cookie():
     token = os.urandom(24).hex()
     # Verify token doesn't already exist
-    with open('users.json', 'r') as f:
-        users = json.load(f)
-    for user in users:
-        if token in user['tokens']:
-            print('Token already exists, generating new one')
-            return generate_cookie()
+    while db.search_users_token(token) != []:
+        token = os.urandom(24).hex()
         
     return token
 
