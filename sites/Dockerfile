@@ -7,8 +7,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
 
 COPY . /app
-# Add mount point for data volume
-VOLUME /data
 
 ENTRYPOINT ["python3"]
 CMD ["sldserver.py"]
