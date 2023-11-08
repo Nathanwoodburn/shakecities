@@ -2,12 +2,22 @@ import os
 import dotenv
 from passlib.hash import argon2
 import json
+import db
 
 dotenv.load_dotenv()
 local = os.getenv('LOCAL')
 
 def hash_password(password):
     return argon2.using(rounds=16).hash(password)
+
+def convert_db_users(db_entry):
+    return {
+        'id': db_entry[0],
+        'email': db_entry[1],
+        'domain': db_entry[2],
+        'password': db_entry[3],
+        'tokens': db_entry[4].split(',')
+    }
 
 # Verify a password against a hashed password
 def verify_password(password, hashed_password):
@@ -40,30 +50,28 @@ def create_user(email, domain, password):
     token = generate_cookie()
     user['tokens'] = [token]
 
-    # If file doesn't exist, create it
-    if not os.path.isfile('users.json'):
-        with open('users.json', 'w') as f:
-            json.dump([], f)
+    # Check if user exists
+    if db.search_users(email) != []:
+        return {'success': False, 'message': 'User already exists'}
 
-
-
-    # Write to file
-    with open('users.json', 'r') as f:
-        users = json.load(f)
-
-    for u in users:
-        if u['email'] == email:
-            return {'success': False, 'message': 'Email already exists'}
-
-    users.append(user)
-    with open('users.json', 'w') as f:
-        json.dump(users, f)
+    db.add_user(email, domain, hashed_password, token)
     return {'success': True, 'message': 'User created', 'token': token}
 
 def validate_token(token):
-    with open('users.json', 'r') as f:
-        users = json.load(f)
-    for user in users:
-        if token in user['tokens']:
-            return user
-    return False
+    search = db.search_users_token(token)
+    if search == []:
+        return False
+    else:
+        return convert_db_users(search[0])
+    
+def logout(token):
+    # Remove token from user
+    user = validate_token(token)
+    if not user:
+        return {'success': False, 'message': 'Invalid token'}
+    user['tokens'].remove(token)
+    # Update user
+    db.update_tokens(user['id'], user['tokens'])
+
+
+    return {'success': True, 'message': 'Logged out'}

@@ -7,17 +7,25 @@ import schedule
 import time
 from email_validator import validate_email, EmailNotValidError
 import accounts
+import db
 
 app = Flask(__name__)
 dotenv.load_dotenv()
 
+# Database connection
+dbargs = {
+    'host':os.getenv('DB_HOST'),
+    'user':os.getenv('DB_USER'),
+    'password':os.getenv('DB_PASSWORD'),
+    'database':os.getenv('DB_NAME')
+}
 
 #Assets routes
 @app.route('/assets/<path:path>')
 def assets(path):
     return send_from_directory('templates/assets', path)
 
-#! TODO make prettier
+
 def error(message):
     return jsonify({'success': False, 'message': message}), 400
 
@@ -56,6 +64,17 @@ def signup():
     except EmailNotValidError as e:
         return jsonify({'success': False, 'message': 'Invalid email'}), 400
 
+@app.route('/logout')
+def logout():
+    token = request.cookies['token']
+    if not accounts.logout(token)['success']:
+        return error('Invalid token')
+    
+    # Remove cookie
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', expires=0)
+    return resp
+
 @app.route('/<path:path>')
 def catch_all(path):
     # If file exists, load it
@@ -73,5 +92,7 @@ def not_found(e):
     return redirect('/')
 
 
+
 if __name__ == '__main__':
+    db.check_tables()
     app.run(debug=False, port=5000, host='0.0.0.0')
