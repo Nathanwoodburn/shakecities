@@ -53,6 +53,9 @@ def create_user(email, domain, password):
     # Check if user exists
     if db.search_users(email) != []:
         return {'success': False, 'message': 'User already exists'}
+    
+    if db.search_users_domain(domain) != []:
+        return {'success': False, 'message': 'Domain already exists'}
 
     db.add_user(email, domain, hashed_password, token)
     return {'success': True, 'message': 'User created', 'token': token}

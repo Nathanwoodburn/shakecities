@@ -64,6 +64,17 @@ def search_users(email):
     connection.close()
     return users
 
+def search_users_domain(domain):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT * FROM users WHERE domain = %s
+    """, (domain,))
+    users = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return users
+
 def search_users_token(token):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()
