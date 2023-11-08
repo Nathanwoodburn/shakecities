@@ -12,28 +12,26 @@ dbargs = {
     'database':os.getenv('DB_NAME')
 }
 
-def check_tables():
-    connection = mysql.connector.connect(**dbargs)
-    cursor = connection.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS site (
-            id INT(11) NOT NULL AUTO_INCREMENT,
-            domain VARCHAR(255) NOT NULL,
-            data VARCHAR(2048) NOT NULL,
-            PRIMARY KEY (id)
-        )
-    """)
-    
-    cursor.close()
-    connection.close()
-
-def get_site(domain):
+def get_website_data(domain):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()
     cursor.execute("""
         SELECT * FROM site WHERE domain = %s
     """, (domain,))
-    site = cursor.fetchall()
+    data = cursor.fetchall()
     cursor.close()
     connection.close()
-    return site
+    
+    if data == []:
+        # Create new entry
+        connection = mysql.connector.connect(**dbargs)
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO site (domain, data)
+            VALUES (%s, %s)
+        """, (domain, ""))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return ""
+    return data[0][2]

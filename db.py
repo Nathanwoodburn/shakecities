@@ -84,3 +84,37 @@ def update_tokens(id,tokens):
     connection.commit()
     cursor.close()
     connection.close()
+
+def get_website_data(domain):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT * FROM site WHERE domain = %s
+    """, (domain,))
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    if data == []:
+        # Create new entry
+        connection = mysql.connector.connect(**dbargs)
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO site (domain, data)
+            VALUES (%s, %s)
+        """, (domain, ""))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return ""
+    return data[0][2]
+
+def update_website_data(domain):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        UPDATE site SET data = %s WHERE domain = %s
+    """, (domain, domain))
+    connection.commit()
+    cursor.close()
+    connection.close()

@@ -1,10 +1,11 @@
-from flask import Flask, make_response, redirect, request, jsonify, render_template, send_from_directory
+from flask import Flask, make_response, redirect, render_template_string, request, jsonify, render_template, send_from_directory
 import os
 import dotenv
 import requests
 import json
 import schedule
 import time
+import db
 
 
 app = Flask(__name__)
@@ -23,7 +24,13 @@ def error(message):
 @app.route('/')
 def index():
     host = request.host
-    return jsonify({'success': True, 'message': host})
+    if len(host.split('.')) < 2:
+        return error('Invalid domain')
+    
+    # Get website data
+    data = db.get_website_data(host)
+    # Render as HTML
+    return render_template_string(data)
 
 
 @app.route('/<path:path>')

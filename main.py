@@ -75,6 +75,40 @@ def login():
     resp.set_cookie('token', user['token'])
     return resp
 
+@app.route('/edit')
+def edit():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Invalid token')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    data = db.get_website_data(user['domain'])
+    return render_template('edit.html',account=user['email'],account_link="account",data=data)
+
+
+@app.route('/edit', methods=['POST'])
+def send_edit():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Invalid token')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    data = request.form['data']
+    db.update_website_data(user['domain'],data)
+    return redirect('/edit')
+
 
 
 @app.route('/logout')
@@ -105,6 +139,8 @@ def catch_all(path):
         account = user['email']
         account_link = "account"
         site = user['domain'] + ".exampledomainnathan1"
+    elif path != "signup" and path != "login":
+        return redirect('/')
 
     # If file exists, load it
     if os.path.isfile('templates/' + path):
