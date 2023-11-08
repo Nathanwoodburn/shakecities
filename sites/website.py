@@ -1,6 +1,6 @@
 from flask import Flask, make_response, redirect, render_template_string, request, jsonify, render_template, send_from_directory
 from bs4 import BeautifulSoup
-from lxml.html.clean import clean_html
+import bleach
 
 def render(data):
     if data == "":
@@ -10,9 +10,9 @@ def render(data):
         soup = BeautifulSoup(data, 'html.parser')
         for script in soup.find_all('script'):
             script.extract()
-        modified_data = str(soup)
-        
-        return render_template_string(clean_html(modified_data))
+
+        modified = str(soup)
+        return render_template_string(bleach.clean(modified))
 
 
     except Exception as e:
