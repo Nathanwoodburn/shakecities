@@ -109,12 +109,12 @@ def get_website_data(domain):
         return ""
     return data[0][2]
 
-def update_website_data(domain):
+def update_website_data(domain,data):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()
     cursor.execute("""
         UPDATE site SET data = %s WHERE domain = %s
-    """, (domain, domain))
+    """, (data, domain))
     connection.commit()
     cursor.close()
     connection.close()
