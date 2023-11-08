@@ -1,6 +1,5 @@
 from flask import Flask, make_response, redirect, render_template_string, request, jsonify, render_template, send_from_directory
 from bs4 import BeautifulSoup
-import bleach
 
 def render(data):
     if data == "":
@@ -12,7 +11,7 @@ def render(data):
             script.extract()
 
         modified = str(soup)
-        return render_template_string(bleach.clean(modified))
+        return render_template_string(modified)
 
 
     except Exception as e:
