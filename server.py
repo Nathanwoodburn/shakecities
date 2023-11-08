@@ -7,6 +7,7 @@ import os
 import dotenv
 import sys
 import json
+import db
 
 
 class GunicornApp(BaseApplication):
@@ -24,6 +25,7 @@ class GunicornApp(BaseApplication):
         return self.application
 
 if __name__ == '__main__':
+    db.check_tables()
     workers = os.getenv('WORKERS')
     threads = os.getenv('THREADS')
     if workers is None:

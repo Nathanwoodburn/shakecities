@@ -30,6 +30,7 @@ def check_tables():
     """)    
     cursor.close()
     connection.close()
+    print("Checked tables")
 
 def add_user(email,domain,password,token):
     connection = mysql.connector.connect(**dbargs)
