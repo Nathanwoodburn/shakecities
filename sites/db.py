@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 import dotenv
+import json
 
 dotenv.load_dotenv()
 
@@ -23,5 +24,12 @@ def get_website_data(domain):
     connection.close()
     
     if data == []:
-        return ""
-    return data[0][2]
+        return "No data found for this domain"
+    
+    parsed = data[0][2]
+    parsed = json.loads(parsed)
+    parsed = parsed['data']
+    # Decoding
+    parsed = parsed.encode('utf-8').decode('unicode-escape')
+
+    return parsed
