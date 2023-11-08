@@ -75,3 +75,20 @@ def logout(token):
 
 
     return {'success': True, 'message': 'Logged out'}
+
+def login(email,password):
+    # Verify email
+    search = db.search_users(email)
+    if search == []:
+        return {'success': False, 'message': 'Invalid email'}
+    user = convert_db_users(search[0])
+    # Verify password
+    if not verify_password(password, user['password']):
+        return {'success': False, 'message': 'Invalid password'}
+    
+    # Create a cookie
+    token = generate_cookie()
+    user['tokens'].append(token)
+    # Update user
+    db.update_tokens(user['id'], user['tokens'])
+    return {'success': True, 'message': 'Logged in', 'token': token}

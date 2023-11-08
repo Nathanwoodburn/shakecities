@@ -48,7 +48,6 @@ def signup():
     email = request.form['email']
     domain = request.form['domain']
     password = request.form['password']
-    print("New signup for " + email + " | " + domain)
     try:
         valid = validate_email(email)
         email = valid.email
@@ -63,6 +62,20 @@ def signup():
 
     except EmailNotValidError as e:
         return jsonify({'success': False, 'message': 'Invalid email'}), 400
+    
+@app.route('/login', methods=['POST'])
+def login():
+    email=request.form['email']
+    password=request.form['password']
+    user = accounts.login(email,password)
+    if not user['success']:
+        return error(user['message'])
+    # Redirect to dashboard with cookie
+    resp = make_response(redirect('/edit'))
+    resp.set_cookie('token', user['token'])
+    return resp
+
+
 
 @app.route('/logout')
 def logout():
@@ -77,13 +90,29 @@ def logout():
 
 @app.route('/<path:path>')
 def catch_all(path):
+    account = "Login"
+    account_link = "login"
+    site = "Null"
+    if 'token' in request.cookies:
+        token = request.cookies['token']
+        # Verify token
+        user = accounts.validate_token(token)
+        if not user:
+            # Remove cookie
+            resp = make_response(redirect('/'))
+            resp.set_cookie('token', '', expires=0)
+            return resp
+        account = user['email']
+        account_link = "account"
+        site = user['domain'] + ".exampledomainnathan1"
+
     # If file exists, load it
     if os.path.isfile('templates/' + path):
-        return render_template(path)
+        return render_template(path,account=account,account_link=account_link,site=site)
     
     # Try with .html
     if os.path.isfile('templates/' + path + '.html'):
-        return render_template(path + '.html')
+        return render_template(path + '.html',account=account,account_link=account_link,site=site)
     return redirect('/') # 404 catch all
 
 # 404 catch all
