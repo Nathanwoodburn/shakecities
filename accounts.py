@@ -33,6 +33,10 @@ def generate_cookie():
 
 # Create a new user
 def create_user(email, domain, password):
+    if len(email) < 4 or len(domain) < 4 or len(password) < 4:
+        return {'success': False, 'message': 'Invalid email, domain, or password'}
+
+
     # Hash password
     hashed_password = hash_password(password)
     # Create user

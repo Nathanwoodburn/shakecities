@@ -27,7 +27,15 @@ def check_tables():
             token VARCHAR(255) NOT NULL,
             PRIMARY KEY (id)
         )
-    """)    
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS site (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            domain VARCHAR(255) NOT NULL,
+            data VARCHAR(2048) NOT NULL,
+            PRIMARY KEY (id)
+        )
+    """)
     cursor.close()
     connection.close()
     print("Checked tables")
