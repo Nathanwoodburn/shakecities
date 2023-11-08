@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 import dotenv
+import json
 
 dotenv.load_dotenv()
 
@@ -32,7 +33,7 @@ def check_tables():
         CREATE TABLE IF NOT EXISTS site (
             id INT(11) NOT NULL AUTO_INCREMENT,
             domain VARCHAR(255) NOT NULL,
-            data VARCHAR(2048) NOT NULL,
+            data JSON,
             PRIMARY KEY (id)
         )
     """)
@@ -99,22 +100,34 @@ def get_website_data(domain):
         # Create new entry
         connection = mysql.connector.connect(**dbargs)
         cursor = connection.cursor()
-        cursor.execute("""
-            INSERT INTO site (domain, data)
-            VALUES (%s, %s)
-        """, (domain, ""))
+        data = {
+            "data": ""
+        }
+        insert_query = "INSERT INTO site (data,domain) VALUES (%s,%s)"
+        cursor.execute(insert_query, (json.dumps(data), domain))
         connection.commit()
         cursor.close()
         connection.close()
         return ""
-    return data[0][2]
+    
+    parsed = data[0][2]
+    parsed = json.loads(parsed)
+    parsed = parsed['data']
+    # Decoding
+    parsed = parsed.encode('utf-8').decode('unicode-escape')
+
+    return parsed
 
 def update_website_data(domain,data):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()
-    cursor.execute("""
-        UPDATE site SET data = %s WHERE domain = %s
-    """, (data, domain))
+    # Create json object
+    data = {
+        "data": data
+    }
+    update_query = "UPDATE site SET data = %s WHERE domain = %s"
+    cursor.execute(update_query, (json.dumps(data), domain))
+    
     connection.commit()
     cursor.close()
     connection.close()
