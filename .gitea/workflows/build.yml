@@ -56,7 +56,7 @@ jobs:
       - name: Build Docker image
         run : |          
           cd sites
-          cp ../templates/* .
+          cp -r ../templates/* .
           cp ../.env .
           cp ../requirements.txt .
 
