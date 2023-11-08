@@ -11,7 +11,6 @@ COPY . /app
 # Add mount point for data volume
 VOLUME /data
 
-ENTRYPOINT ["python3"]
-CMD ["server.py", "sldserver.py"]
+CMD [ "python3", "server.py" ] & [ "python3", "sldserver.py" ]
 
 FROM builder as dev-envs
