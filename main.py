@@ -81,7 +81,6 @@ def login():
 
 @app.route('/edit')
 def edit():
-    
     if 'token' not in request.cookies:
         return redirect('/')
 
@@ -152,11 +151,22 @@ def logout():
     resp.set_cookie('token', '', expires=0)
     return resp
 
+@app.route('/claim')
+def claim():
+    # Find domain
+    domain = request.args.get('domain')
+    return redirect('/signup?domain=' + domain)
+
+
+
 @app.route('/<path:path>')
 def catch_all(path):
     account = "Login"
     account_link = "login"
     site = "Null"
+    domain = ""
+    if 'domain' in request.args:
+        domain = request.args.get('domain')
     if 'token' in request.cookies:
         token = request.cookies['token']
         # Verify token
@@ -174,11 +184,11 @@ def catch_all(path):
 
     # If file exists, load it
     if os.path.isfile('templates/' + path):
-        return render_template(path,account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN)
+        return render_template(path,account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
     
     # Try with .html
     if os.path.isfile('templates/' + path + '.html'):
-        return render_template(path + '.html',account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN)
+        return render_template(path + '.html',account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
     return redirect('/') # 404 catch all
 
 # 404 catch all
