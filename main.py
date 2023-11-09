@@ -119,12 +119,15 @@ def send_edit():
         resp.set_cookie('token', '', expires=0)
         return resp
     
+    # Json data
     data = {}
     data['data'] = request.form['data']
     data['HNS'] = request.form['hns']
     data['BTC'] = request.form['btc']
     data['ETH'] = request.form['eth']
 
+    # Convert to json
+    data = json.dumps(data)
     db.update_website_data_raw(user['domain'],data)
     return redirect('/edit')
 
