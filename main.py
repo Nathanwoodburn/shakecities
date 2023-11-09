@@ -20,6 +20,10 @@ dbargs = {
     'database':os.getenv('DB_NAME')
 }
 
+CITY_DOMAIN = os.getenv('CITY_DOMAIN')
+if CITY_DOMAIN == None:
+    CITY_DOMAIN = "exampledomainnathan1"
+
 #Assets routes
 @app.route('/assets/<path:path>')
 def assets(path):
@@ -40,8 +44,8 @@ def index():
             resp = make_response(redirect('/'))
             resp.set_cookie('token', '', expires=0)
             return resp
-        return render_template('index.html',account=user['email'],account_link="account")
-    return render_template('index.html',account="Login",account_link="login")
+        return render_template('index.html',account=user['email'],account_link="account",CITY_DOMAIN=CITY_DOMAIN)
+    return render_template('index.html',account="Login",account_link="login",CITY_DOMAIN=CITY_DOMAIN)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -77,6 +81,10 @@ def login():
 
 @app.route('/edit')
 def edit():
+    
+    if 'token' not in request.cookies:
+        return redirect('/')
+
     token = request.cookies['token']
     if not accounts.validate_token(token):
         return error('Invalid token')
@@ -160,17 +168,17 @@ def catch_all(path):
             return resp
         account = user['email']
         account_link = "account"
-        site = user['domain'] + ".exampledomainnathan1"
+        site = user['domain'] + "." + CITY_DOMAIN
     elif path != "signup" and path != "login":
         return redirect('/')
 
     # If file exists, load it
     if os.path.isfile('templates/' + path):
-        return render_template(path,account=account,account_link=account_link,site=site)
+        return render_template(path,account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN)
     
     # Try with .html
     if os.path.isfile('templates/' + path + '.html'):
-        return render_template(path + '.html',account=account,account_link=account_link,site=site)
+        return render_template(path + '.html',account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN)
     return redirect('/') # 404 catch all
 
 # 404 catch all
