@@ -51,5 +51,6 @@ def get_website_wallet(domain,token):
     parsed = json.loads(parsed)
     if token in parsed:
         parsed = parsed[token]
+        return parsed
     
     return ""
