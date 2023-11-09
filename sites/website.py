@@ -1,9 +1,15 @@
 from flask import Flask, make_response, redirect, render_template_string, request, jsonify, render_template, send_from_directory
 from bs4 import BeautifulSoup
+import os
+import dotenv
+
+main_domain = "cities.hnshosting.au"
+if os.getenv('MAIN_DOMAIN') != None:
+    main_domain = os.getenv('MAIN_DOMAIN')
 
 def render(data):
     if data == "":
-        return "No data found for this domain"
+        return redirect("https://" + main_domain + '/claim?domain=' + request.host.split('.')[0])
     
     try:
         soup = BeautifulSoup(data, 'html.parser')

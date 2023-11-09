@@ -21,6 +21,7 @@ services:
       DB_USER: main
       DB_PASSWORD: your-db-password
       DB_NAME: main
+      CITY_DOMAIN: exampledomainnathan1
       WORKERS: 2 # number of workers to run (should be 2 * number of cores)
 
   sites:
@@ -32,6 +33,7 @@ services:
       DB_USER: main
       DB_PASSWORD: your-db-password
       DB_NAME: main
+      MAIN_DOMAIN: cities.hnshosting.au
       WORKERS: 2 # number of workers to run (should be 2 * number of cores)
 
   db:

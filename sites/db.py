@@ -24,7 +24,7 @@ def get_website_data(domain):
     connection.close()
     
     if data == []:
-        return "No data found for this domain"
+        return ""
     
     parsed = data[0][2]
     parsed = json.loads(parsed)

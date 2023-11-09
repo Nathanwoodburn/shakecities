@@ -12,21 +12,20 @@ import website
 app = Flask(__name__)
 dotenv.load_dotenv()
 
+main_domain = "cities.hnshosting.au"
+if os.getenv('MAIN_DOMAIN') != None:
+    main_domain = os.getenv('MAIN_DOMAIN')
 
 #Assets routes
 @app.route('/assets/<path:path>')
 def assets(path):
     return send_from_directory('templates/assets', path)
 
-#! TODO make prettier
-def error(message):
-    return jsonify({'success': False, 'message': message}), 400
-
 @app.route('/')
 def index():
     host = request.host
     if len(host.split('.')) != 2:
-        return error('Invalid domain')
+        return redirect('https://'+main_domain)
     host = host.split('.')[0]
     
     # Get website data
