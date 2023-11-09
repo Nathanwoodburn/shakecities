@@ -89,9 +89,21 @@ def edit():
         return resp
     
     data = db.get_website_data_raw(user['domain'])
+    html = ""
+    hns = ""
+    btc = ""
+    eth = ""
 
+    if 'data' in data:
+        html = data['data'].encode('utf-8').decode('unicode-escape')
+    if 'HNS' in data:
+        hns = data['HNS']
+    if 'BTC' in data:
+        btc = data['BTC']
+    if 'ETH' in data:
+        eth = data['ETH']
 
-    return render_template('edit.html',account=user['email'],account_link="account",data=data['data'],hns=data['HNS'],btc=data['BTC'],eth=data['ETH'])
+    return render_template('edit.html',account=user['email'],account_link="account",data=html,hns=hns,btc=btc,eth=eth)
 
 
 @app.route('/edit', methods=['POST'])
