@@ -1,5 +1,14 @@
-# shakecities
+# ShakeCities
+A joint project between Nathan.Woodburn/ and crymzyn/  
+ShakeCities is a geocities clone with an emphasis on Handshake domains.  
+Create a free site on yourname.shakecities/. You control that site and can add whatever you want to it.  
+Every domain comes enabled with HTTPS via DANE. We have support HIP02 aliases, so you can send HNS to yourname.shakecities/  
 
+
+
+
+
+### Deployment
 ```
 version: '3'
 services:

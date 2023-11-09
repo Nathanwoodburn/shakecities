@@ -88,8 +88,10 @@ def edit():
         resp.set_cookie('token', '', expires=0)
         return resp
     
-    data = db.get_website_data(user['domain'])
-    return render_template('edit.html',account=user['email'],account_link="account",data=data)
+    data = db.get_website_data_raw(user['domain'])
+
+
+    return render_template('edit.html',account=user['email'],account_link="account",data=data['data'],hns=data['HNS'],btc=data['BTC'],eth=data['ETH'])
 
 
 @app.route('/edit', methods=['POST'])
@@ -105,8 +107,13 @@ def send_edit():
         resp.set_cookie('token', '', expires=0)
         return resp
     
-    data = request.form['data']
-    db.update_website_data(user['domain'],data)
+    data = {}
+    data['data'] = request.form['data']
+    data['HNS'] = request.form['hns']
+    data['BTC'] = request.form['btc']
+    data['ETH'] = request.form['eth']
+
+    db.update_website_data_raw(user['domain'],data)
     return redirect('/edit')
 
 

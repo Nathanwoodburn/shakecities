@@ -129,13 +129,71 @@ def get_website_data(domain):
 
     return parsed
 
-def update_website_data(domain,data):
+def get_website_data_raw(domain):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()
-    # Create json object
-    data = {
-        "data": data
-    }
+    cursor.execute("""
+        SELECT * FROM site WHERE domain = %s
+    """, (domain,))
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    if data == []:
+        # Create new entry
+        connection = mysql.connector.connect(**dbargs)
+        cursor = connection.cursor()
+        data = {
+            "data": ""
+        }
+        insert_query = "INSERT INTO site (data,domain) VALUES (%s,%s)"
+        cursor.execute(insert_query, (json.dumps(data), domain))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return ""
+    
+    parsed = data[0][2]
+    parsed = json.loads(parsed)
+
+    return parsed
+
+def update_website_data(domain,data):
+    data = get_website_data_raw(domain)
+
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    # Update json object
+    data['data'] = data
+
+    update_query = "UPDATE site SET data = %s WHERE domain = %s"
+    cursor.execute(update_query, (json.dumps(data), domain))
+    
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+def update_website_data_raw(domain,data):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    # Update json object
+    data = json.loads(data)
+
+    update_query = "UPDATE site SET data = %s WHERE domain = %s"
+    cursor.execute(update_query, (json.dumps(data), domain))
+    
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+def update_website_wallet(domain,token,address):
+    data = get_website_data_raw(domain)
+
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    # Update json object
+    data[token] = address
+
     update_query = "UPDATE site SET data = %s WHERE domain = %s"
     cursor.execute(update_query, (json.dumps(data), domain))
     

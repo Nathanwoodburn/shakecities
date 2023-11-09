@@ -35,6 +35,16 @@ def index():
     return website.render(data)
 
 
+@app.route('/.well-known/wallets/<token>')
+def wallet(token):
+    address = db.get_website_wallet(request.host.split('.')[0],token)
+    if address == "":
+        return redirect('/')
+    # Plain text
+    response = make_response(address)
+    response.mimetype = "text/plain"
+    return response
+
 @app.route('/<path:path>')
 def catch_all(path):
     return redirect('/') # 404 catch all

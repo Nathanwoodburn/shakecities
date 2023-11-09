@@ -33,3 +33,23 @@ def get_website_data(domain):
     parsed = parsed.encode('utf-8').decode('unicode-escape')
 
     return parsed
+
+def get_website_wallet(domain,token):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT * FROM site WHERE domain = %s
+    """, (domain,))
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    if data == []:
+        return ""
+    
+    parsed = data[0][2]
+    parsed = json.loads(parsed)
+    if token in parsed:
+        parsed = parsed[token]
+    
+    return ""
