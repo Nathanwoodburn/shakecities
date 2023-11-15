@@ -8,7 +8,12 @@ import dotenv
 import sys
 import json
 import db
+from apscheduler.schedulers.background import BackgroundScheduler
 
+
+def update_sites_job():
+    print("Updating random sites", flush=True)
+    main.update_random_sites()
 
 class GunicornApp(BaseApplication):
     def __init__(self, app, options=None):
@@ -26,6 +31,12 @@ class GunicornApp(BaseApplication):
 
 if __name__ == '__main__':
     db.check_tables()
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(update_sites_job, 'interval', minutes=15)
+    scheduler.start()
+
+
     workers = os.getenv('WORKERS')
     threads = os.getenv('THREADS')
     if workers is None:

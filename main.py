@@ -24,6 +24,8 @@ CITY_DOMAIN = os.getenv('CITY_DOMAIN')
 if CITY_DOMAIN == None:
     CITY_DOMAIN = "exampledomainnathan1"
 
+random_sites = ""
+
 #Assets routes
 @app.route('/assets/<path:path>')
 def assets(path):
@@ -35,6 +37,15 @@ def error(message):
 
 @app.route('/')
 def index():
+    global random_sites
+    if random_sites == "":
+        random_sites_names = db.get_random_sites()
+        for site in random_sites_names:
+            random_sites += "<a href='https://" + site + "." + CITY_DOMAIN + "' target='_blank'>" + site + "." +CITY_DOMAIN+ "</a><br>"
+        
+    
+
+
     if 'token' in request.cookies:
         token = request.cookies['token']
         # Verify token
@@ -44,8 +55,8 @@ def index():
             resp = make_response(redirect('/'))
             resp.set_cookie('token', '', expires=0)
             return resp
-        return render_template('index.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN)
-    return render_template('index.html',account="Login",account_link="login",account_link_name="Login",CITY_DOMAIN=CITY_DOMAIN)
+        return render_template('index.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN,random_sites=random_sites)
+    return render_template('index.html',account="Login",account_link="login",account_link_name="Login",CITY_DOMAIN=CITY_DOMAIN,random_sites=random_sites)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -229,7 +240,12 @@ def catch_all(path):
 def not_found(e):
     return redirect('/')
 
-
+def update_random_sites():
+    global random_sites
+    random_sites_names = db.get_random_sites()
+    random_sites = ""
+    for site in random_sites_names:
+        random_sites += "<a href='https://" + site + "." + CITY_DOMAIN + "' target='_blank'>" + site + "." +CITY_DOMAIN+ "</a><br>"
 
 if __name__ == '__main__':
     db.check_tables()

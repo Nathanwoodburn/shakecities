@@ -2,6 +2,7 @@ import mysql.connector
 import os
 import dotenv
 import json
+import random
 
 dotenv.load_dotenv()
 
@@ -200,3 +201,23 @@ def update_website_wallet(domain,token,address):
     connection.commit()
     cursor.close()
     connection.close()
+
+def get_random_sites():
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT * FROM site
+    """)
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    # Randomly pick 5
+    if len(data) > 5:
+        data = random.sample(data,5)  
+
+    names = []
+    for site in data:
+        names.append(site[1])
+
+    return names
