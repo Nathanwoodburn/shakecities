@@ -104,6 +104,8 @@ def edit():
     location = ""
     avatar = ""
     bg_colour = ""
+    fg_colour = ""
+    text_colour = ""
 
     if 'data' in data:
         html = data['data'].encode('utf-8').decode('unicode-escape')
@@ -121,10 +123,15 @@ def edit():
         avatar = data['avatar']
     if 'bg_colour' in data:
         bg_colour = data['bg_colour']
+    if 'fg_colour' in data:
+        fg_colour = data['fg_colour']
+    if 'text_colour' in data:
+        text_colour = data['text_colour']
 
     return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,
                            hns=hns,btc=btc,eth=eth,hnschat=hnschat,location=location,avatar=avatar,
-                           bg_colour=bg_colour,CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
+                           bg_colour=bg_colour,fg_colour=fg_colour,text_colour=text_colour,
+                           CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
 
 
 @app.route('/edit', methods=['POST'])
@@ -150,6 +157,8 @@ def send_edit():
     data['location'] = request.form['location']
     data['avatar'] = request.form['avatar']
     data['bg_colour'] = request.form['bg_colour']
+    data['fg_colour'] = request.form['fg_colour']
+    data['text_colour'] = request.form['text_colour']
 
     # Convert to json
     data = json.dumps(data)

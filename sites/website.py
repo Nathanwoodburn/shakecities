@@ -23,14 +23,10 @@ def render(data,db_object):
         return "<h1>Invalid HTML</h1><br>" + str(e)
     
     bg_colour = db_object['bg_colour']
-    hex_colour = bg_colour.lstrip('#')
-    text_colour = generate_foreground_color(tuple(int(hex_colour[i:i+2], 16) for i in (0, 2, 4)))
-    text_colour = rgb_to_hex(text_colour)
+    fg_colour = db_object['fg_colour']
+    text_colour = db_object['text_colour']
 
-    if (text_colour == "#000000"):
-        hns_icon = "assets/img/HNS.png"
-    else:
-        hns_icon = "assets/img/HNSW.png"
+    
 
     try:
         avatar = db_object['avatar']
@@ -39,13 +35,17 @@ def render(data,db_object):
         hns = db_object['HNS']
         btc = db_object['BTC']
         eth = db_object['ETH']
+        if (rgb_to_hex(generate_foreground_color(fg_colour)) == ""):
+            hns_icon = "assets/img/HNSW.png"
+        else:
+            hns_icon = "assets/img/HNS.png"
 
     except Exception as e:
         return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br>" + str(e)
 
 
     return render_template('city.html',html=html,bg_colour=bg_colour,text_colour=text_colour,
-                           avatar=avatar,main_domain=main_domain,
+                            fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
                            hnschat=hnschat,location=location, hns_icon=hns_icon,
                            hns=hns,btc=btc,eth=eth, data=html)
     
@@ -75,15 +75,14 @@ def calculate_contrast_ratio(color1, color2):
     return contrast_ratio
 
 def generate_foreground_color(background_color):
-    # A color with a high contrast ratio against the background color
-    contrast_color = (255, 255, 255)  # White
+    # Convert to RGB tuple
+    background_color=background_color.lstrip('#')
+    background_color = tuple(int(background_color[i:i+2], 16) for i in (0, 2, 4))
 
-    # Calculate the contrast ratio
+    contrast_color = (255, 255, 255)  # White
     ratio = calculate_contrast_ratio(background_color, contrast_color)
 
-    # Adjust the contrast color based on the contrast ratio
     if ratio < 4.5:
-        # If the contrast ratio is below the threshold, use black as the foreground color
         return (0, 0, 0)  # Black
     else:
         return contrast_color

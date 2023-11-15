@@ -59,9 +59,9 @@ def clean_template():
     with open('templates/city.html') as f:
         data = f.read()
     
-    data = data.replace('#f1ffff', '{{bg_colour}}')
+    data = data.replace('#f1ffff', '{{fg_colour}}')
     data = data.replace('#1fffff', '{{text_colour}}')
-    data = data.replace('#000000', '{{text_colour}}')
+    data = data.replace('#000000', '{{bg_colour}}')
     # Save
     with open('templates/city.html', 'w') as f:
         f.write(data)
