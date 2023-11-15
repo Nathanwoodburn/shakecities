@@ -44,8 +44,8 @@ def index():
             resp = make_response(redirect('/'))
             resp.set_cookie('token', '', expires=0)
             return resp
-        return render_template('index.html',account=user['email'],account_link="account",CITY_DOMAIN=CITY_DOMAIN)
-    return render_template('index.html',account="Login",account_link="login",CITY_DOMAIN=CITY_DOMAIN)
+        return render_template('index.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN)
+    return render_template('index.html',account="Login",account_link="login",account_link_name="Login",CITY_DOMAIN=CITY_DOMAIN)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -82,7 +82,7 @@ def login():
 @app.route('/edit')
 def edit():
     if 'token' not in request.cookies:
-        return redirect('/')
+        return redirect('/login')
 
     token = request.cookies['token']
     if not accounts.validate_token(token):
@@ -91,7 +91,7 @@ def edit():
     user = accounts.validate_token(token)
     if not user:
         # Remove cookie
-        resp = make_response(redirect('/'))
+        resp = make_response(redirect('/login'))
         resp.set_cookie('token', '', expires=0)
         return resp
     
@@ -110,7 +110,7 @@ def edit():
     if 'ETH' in data:
         eth = data['ETH']
 
-    return render_template('edit.html',account=user['email'],account_link="account",data=html,hns=hns,btc=btc,eth=eth)
+    return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,hns=hns,btc=btc,eth=eth)
 
 
 @app.route('/edit', methods=['POST'])
@@ -122,7 +122,7 @@ def send_edit():
     user = accounts.validate_token(token)
     if not user:
         # Remove cookie
-        resp = make_response(redirect('/'))
+        resp = make_response(redirect('/login'))
         resp.set_cookie('token', '', expires=0)
         return resp
     
@@ -163,6 +163,7 @@ def claim():
 def catch_all(path):
     account = "Login"
     account_link = "login"
+    account_link_name = "Login"
     site = "Null"
     domain = ""
     if 'domain' in request.args:
@@ -178,17 +179,18 @@ def catch_all(path):
             return resp
         account = user['email']
         account_link = "account"
+        account_link_name = "Account"
         site = user['domain'] + "." + CITY_DOMAIN
     elif path != "signup" and path != "login":
         return redirect('/')
 
     # If file exists, load it
     if os.path.isfile('templates/' + path):
-        return render_template(path,account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
+        return render_template(path,account=account,account_link=account_link,account_link_name=account_link_name,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
     
     # Try with .html
     if os.path.isfile('templates/' + path + '.html'):
-        return render_template(path + '.html',account=account,account_link=account_link,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
+        return render_template(path + '.html',account=account,account_link=account_link,account_link_name=account_link_name,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
     return redirect('/') # 404 catch all
 
 # 404 catch all
