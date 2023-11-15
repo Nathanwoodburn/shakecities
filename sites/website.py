@@ -45,7 +45,7 @@ def render(data,db_object):
             hns_icon = "assets/img/HNS.png"
 
     except Exception as e:
-        return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br><p>This can often be fixed by saving your site again in the editor</p><br>" + "<script>console.log('" + str(e) + "');</script>"
+        return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br><p>This can often be fixed by saving your site again in the editor</p><br>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
 
 
     return render_template('city.html',html=html,bg_colour=bg_colour,text_colour=text_colour,
