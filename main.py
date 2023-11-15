@@ -75,7 +75,7 @@ def login():
     if not user['success']:
         return error(user['message'])
     # Redirect to dashboard with cookie
-    resp = make_response(redirect('/edit'))
+    resp = make_response(redirect('/account'))
     resp.set_cookie('token', user['token'])
     return resp
 
@@ -183,6 +183,10 @@ def catch_all(path):
         site = user['domain'] + "." + CITY_DOMAIN
     elif path != "signup" and path != "login":
         return redirect('/')
+    
+    if path == "account":
+        account_link = "logout"
+        account_link_name = "Logout"
 
     # If file exists, load it
     if os.path.isfile('templates/' + path):

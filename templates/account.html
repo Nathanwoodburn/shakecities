@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html data-bs-theme="light" lang="en" style="background: #000000;">
 
 <head>
     <meta charset="utf-8">
@@ -9,24 +9,23 @@
     <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-md bg-dark py-3" data-bs-theme="dark">
-        <div class="container"><a class="navbar-brand d-flex align-items-center" href="/"><span class="bs-icon-sm bs-icon-rounded bs-icon-primary d-flex justify-content-center align-items-center me-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-bezier">
-                        <path fill-rule="evenodd" d="M0 10.5A1.5 1.5 0 0 1 1.5 9h1A1.5 1.5 0 0 1 4 10.5v1A1.5 1.5 0 0 1 2.5 13h-1A1.5 1.5 0 0 1 0 11.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm10.5.5A1.5 1.5 0 0 1 13.5 9h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM6 4.5A1.5 1.5 0 0 1 7.5 3h1A1.5 1.5 0 0 1 10 4.5v1A1.5 1.5 0 0 1 8.5 7h-1A1.5 1.5 0 0 1 6 5.5v-1zM7.5 4a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"></path>
-                        <path d="M6 4.5H1.866a1 1 0 1 0 0 1h2.668A6.517 6.517 0 0 0 1.814 9H2.5c.123 0 .244.015.358.043a5.517 5.517 0 0 1 3.185-3.185A1.503 1.503 0 0 1 6 5.5v-1zm3.957 1.358A1.5 1.5 0 0 0 10 5.5v-1h4.134a1 1 0 1 1 0 1h-2.668a6.517 6.517 0 0 1 2.72 3.5H13.5c-.123 0-.243.015-.358.043a5.517 5.517 0 0 0-3.185-3.185z"></path>
-                    </svg></span><span>Brand</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-6"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse flex-grow-0 order-md-first" id="navcol-6">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="/signup">Create your page</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/edit">Edit your page</a></li>
-                </ul>
-                <div class="d-md-none my-2"><button class="btn btn-light me-2" type="button">Button</button><button class="btn btn-primary" type="button">Button</button></div>
-            </div>
-            <div class="d-none d-md-block"><a class="btn btn-primary" role="button" href="/account">{{account}}</a></div>
-        </div>
-    </nav>
+<body style="background: #000000;color: #ffffff;margin: auto;width: 95%;">
+    <section>
+        <section style="height: 15vh;background: url(&quot;assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp&quot;) bottom / cover no-repeat;min-height: 130px;"></section>
+        <section class="d-print-none d-lg-none d-xl-none d-xxl-none" style="width: 30vw;border-radius: 50%;background: #000000;padding: 20px;height: 30vw;margin: auto;margin-top: -15vw;display: flex;"><img class="img-fluid" src="assets/img/HNSW.png" width="100%"></section>
+        <section class="d-print-none d-lg-none d-xl-none d-xxl-none" style="display: block;width: 100%;text-align: center;margin-top: 10px;">
+            <div style="display: inline-block;margin: auto;"><a class="btn btn-primary" role="button" style="margin: 10px;" href="/signup">Create your page</a><a class="btn btn-primary" role="button" style="margin: 10px;" href="/{{account_link}}">{{account}}</a></div>
+        </section>
+        <section class="d-none d-print-block d-lg-block d-xl-block d-xxl-block" style="display: block;">
+            <div style="width: 100%;text-align: right;margin-top: -4em;"><a class="btn btn-primary" role="button" style="margin: 10px;" href="/signup">Create a new page</a><a class="btn btn-primary" role="button" style="margin: 10px;" href="/{{account_link}}">{{account_link_name}}</a></div>
+        </section>
+        <section class="d-none d-print-block d-lg-block d-xl-block d-xxl-block" style="width: 15vw;border-radius: 50%;background: #000000;padding: 20px;height: 15vw;margin: auto;display: flex;margin-top: -6vw;"><img class="img-fluid" src="assets/img/HNSW.png" width="100%"></section>
+        <section class="d-none d-print-block d-lg-block d-xl-block d-xxl-block" style="height: 3em;"></section>
+    </section>
     <section style="margin-top: 50px;text-align: center;">
-        <p>Email: {{account}}<br>Site: <a href="https://{{site}}" target="_blank">{{site}}</a></p><a class="btn btn-primary" role="button" href="/logout">Logout</a>
+        <h1>Welcome to ShakeCities</h1>
+        <p>Congratulations your site is ready for use.<br><br></p>
+        <div style="max-width: 10em;margin: auto;"><a class="btn btn-primary" role="button" href="https://{{site}}" style="display: block;margin: 10px;">Visit your site</a><a class="btn btn-primary" role="button" href="/edit" style="display: block;margin: 10px;">Edit your site</a><a class="btn btn-primary" role="button" href="/logout" style="display: block;margin: 10px;">Logout</a></div>
     </section>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/script.min.js"></script>
