@@ -22,12 +22,6 @@ def render(data,db_object):
     except Exception as e:
         return "<h1>Invalid HTML</h1><br>" + str(e)
     
-    bg_colour = db_object['bg_colour']
-    fg_colour = db_object['fg_colour']
-    text_colour = db_object['text_colour']
-
-    
-
     try:
         avatar = db_object['avatar']
         hnschat = db_object['hnschat']
@@ -35,6 +29,9 @@ def render(data,db_object):
         hns = db_object['HNS']
         btc = db_object['BTC']
         eth = db_object['ETH']
+        bg_colour = db_object['bg_colour']
+        fg_colour = db_object['fg_colour']
+        text_colour = db_object['text_colour']
         if (rgb_to_hex(generate_foreground_color(fg_colour)) == ""):
             hns_icon = "assets/img/HNSW.png"
         else:
