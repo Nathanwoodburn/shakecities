@@ -29,6 +29,13 @@ def render(data,db_object):
         hns = db_object['HNS']
         btc = db_object['BTC']
         eth = db_object['ETH']
+        if hns != "":
+            hns = "HNS: " + hns
+        if btc != "":
+            btc = "BTC: " + btc
+        if eth != "":
+            eth = "ETH: " + eth
+
         bg_colour = db_object['bg_colour']
         fg_colour = db_object['fg_colour']
         text_colour = db_object['text_colour']
