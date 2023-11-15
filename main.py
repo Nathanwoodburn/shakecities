@@ -100,6 +100,10 @@ def edit():
     hns = ""
     btc = ""
     eth = ""
+    hnschat = ""
+    location = ""
+    avatar = ""
+    bg_colour = ""
 
     if 'data' in data:
         html = data['data'].encode('utf-8').decode('unicode-escape')
@@ -109,8 +113,18 @@ def edit():
         btc = data['BTC']
     if 'ETH' in data:
         eth = data['ETH']
+    if 'hnschat' in data:
+        hnschat = data['hnschat']
+    if 'location' in data:
+        location = data['location']
+    if 'avatar' in data:
+        avatar = data['avatar']
+    if 'bg_colour' in data:
+        bg_colour = data['bg_colour']
 
-    return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,hns=hns,btc=btc,eth=eth)
+    return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,
+                           hns=hns,btc=btc,eth=eth,hnschat=hnschat,location=location,avatar=avatar,
+                           bg_colour=bg_colour,CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
 
 
 @app.route('/edit', methods=['POST'])
@@ -132,6 +146,10 @@ def send_edit():
     data['HNS'] = request.form['hns']
     data['BTC'] = request.form['btc']
     data['ETH'] = request.form['eth']
+    data['hnschat'] = request.form['hnschat']
+    data['location'] = request.form['location']
+    data['avatar'] = request.form['avatar']
+    data['bg_colour'] = request.form['bg_colour']
 
     # Convert to json
     data = json.dumps(data)
