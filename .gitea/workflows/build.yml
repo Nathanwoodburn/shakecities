@@ -56,7 +56,7 @@ jobs:
       - name: Build Docker image
         run : |          
           cd sites
-          cp -r ../templates/* .
+          cp -r ../templates/ .
           cp ../requirements.txt .
 
           echo "${{ secrets.DOCKERGIT_TOKEN }}" | docker login git.woodburn.au -u nathanwoodburn --password-stdin
