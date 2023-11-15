@@ -29,20 +29,32 @@ def render(data,db_object):
         hns = db_object['HNS']
         btc = db_object['BTC']
         eth = db_object['ETH']
-        if hns != "":
-            hns = "HNS: " + hns
-        if btc != "":
-            btc = "BTC: " + btc
-        if eth != "":
-            eth = "ETH: " + eth
-
         bg_colour = db_object['bg_colour']
         fg_colour = db_object['fg_colour']
         text_colour = db_object['text_colour']
-        if (rgb_to_hex(generate_foreground_color(fg_colour)) == ""):
+        if (rgb_to_hex(generate_foreground_color(text_colour)) == "#000000"):
             hns_icon = "assets/img/HNSW.png"
+            btc_icon = "assets/img/BTCW.png"
+            eth_icon = "assets/img/ETHW.png"
+            location_icon = "assets/img/mapw.png"
         else:
             hns_icon = "assets/img/HNS.png"
+            btc_icon = "assets/img/BTC.png"
+            eth_icon = "assets/img/ETH.png"
+            location_icon = "assets/img/map.png"
+
+        if hns != "":
+            hns = "<img src='" + hns_icon + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns
+        if btc != "":
+            btc = "<img src='" + btc_icon + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc
+        if eth != "":
+            eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
+        if hnschat != "":
+            hnschat = "<img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat
+        if location != "":
+            location = "<img src='"+location_icon+"' width='20px' height='30px' style='margin-right: 5px;'>" + location
+
+
 
     except Exception as e:
         return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br><p>This can often be fixed by saving your site again in the editor</p><br>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
