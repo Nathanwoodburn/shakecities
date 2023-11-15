@@ -7,18 +7,86 @@ main_domain = "cities.hnshosting.au"
 if os.getenv('MAIN_DOMAIN') != None:
     main_domain = os.getenv('MAIN_DOMAIN')
 
-def render(data):
+def render(data,db_object):
     if data == "":
         return redirect("https://" + main_domain + '/claim?domain=' + request.host.split('.')[0])
     
+    # Render as HTML
+    html = ""
     try:
         soup = BeautifulSoup(data, 'html.parser')
         for script in soup.find_all('script'):
             script.extract()
 
-        modified = str(soup)
-        return render_template_string(modified)
-
-
+        html = str(soup)
     except Exception as e:
         return "<h1>Invalid HTML</h1><br>" + str(e)
+    
+    bg_colour = db_object['bg_colour']
+    hex_colour = bg_colour.lstrip('#')
+    text_colour = generate_foreground_color(tuple(int(hex_colour[i:i+2], 16) for i in (0, 2, 4)))
+    text_colour = rgb_to_hex(text_colour)
+
+    if (text_colour == "#000000"):
+        hns_icon = "assets/img/HNS.png"
+    else:
+        hns_icon = "assets/img/HNSW.png"
+
+    try:
+        avatar = db_object['avatar']
+        hnschat = db_object['hnschat']
+        location = db_object['location']
+        hns = db_object['HNS']
+        btc = db_object['BTC']
+        eth = db_object['ETH']
+
+    except Exception as e:
+        return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br>" + str(e)
+
+
+    return render_template('city.html',html=html,bg_colour=bg_colour,text_colour=text_colour,
+                           avatar=avatar,main_domain=main_domain,
+                           hnschat=hnschat,location=location, hns_icon=hns_icon,
+                           hns=hns,btc=btc,eth=eth, data=html)
+    
+
+
+def calculate_contrast_ratio(color1, color2):
+    def calculate_luminance(color):
+        def adjust_color_value(value):
+            value /= 255.0
+            if value <= 0.03928:
+                return value / 12.92
+            return ((value + 0.055) / 1.055) ** 2.4
+
+        r, g, b = color
+        r = adjust_color_value(r)
+        g = adjust_color_value(g)
+        b = adjust_color_value(b)
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+    luminance1 = calculate_luminance(color1)
+    luminance2 = calculate_luminance(color2)
+
+    brighter = max(luminance1, luminance2)
+    darker = min(luminance1, luminance2)
+
+    contrast_ratio = (brighter + 0.05) / (darker + 0.05)
+    return contrast_ratio
+
+def generate_foreground_color(background_color):
+    # A color with a high contrast ratio against the background color
+    contrast_color = (255, 255, 255)  # White
+
+    # Calculate the contrast ratio
+    ratio = calculate_contrast_ratio(background_color, contrast_color)
+
+    # Adjust the contrast color based on the contrast ratio
+    if ratio < 4.5:
+        # If the contrast ratio is below the threshold, use black as the foreground color
+        return (0, 0, 0)  # Black
+    else:
+        return contrast_color
+    
+def rgb_to_hex(rgb_color):
+    return "#{:02x}{:02x}{:02x}".format(*rgb_color)

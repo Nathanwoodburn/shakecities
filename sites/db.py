@@ -34,6 +34,35 @@ def get_website_data(domain):
 
     return parsed
 
+def get_website_data_raw(domain):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT * FROM site WHERE domain = %s
+    """, (domain,))
+    data = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    if data == []:
+        # Create new entry
+        connection = mysql.connector.connect(**dbargs)
+        cursor = connection.cursor()
+        data = {
+            "data": ""
+        }
+        insert_query = "INSERT INTO site (data,domain) VALUES (%s,%s)"
+        cursor.execute(insert_query, (json.dumps(data), domain))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return ""
+    
+    parsed = data[0][2]
+    parsed = json.loads(parsed)
+
+    return parsed
+
 def get_website_wallet(domain,token):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()

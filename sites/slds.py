@@ -30,8 +30,9 @@ def index():
     
     # Get website data
     data = db.get_website_data(host)
+    db_object = db.get_website_data_raw(host)
     # Render as HTML
-    return website.render(data)
+    return website.render(data,db_object)
 
 
 @app.route('/.well-known/wallets/<token>')
@@ -53,6 +54,18 @@ def catch_all(path):
 def not_found(e):
     return redirect('/')
 
+def clean_template():
+    # Clean template
+    with open('templates/city.html') as f:
+        data = f.read()
+    
+    data = data.replace('#f1ffff', '{{bg_colour}}')
+    data = data.replace('#1fffff', '{{text_colour}}')
+    data = data.replace('#000000', '{{text_colour}}')
+    # Save
+    with open('templates/city.html', 'w') as f:
+        f.write(data)
+    print("Cleaned template", flush=True)
 
 if __name__ == '__main__':
     app.run(debug=False, port=5000, host='0.0.0.0')
