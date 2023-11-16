@@ -13,10 +13,17 @@ def render(data,db_object):
     
     # Render as HTML
     html = ""
+    ssl = "<script src='https://nathan.woodburn/https.js'></script>"
+    if ("localhost" in request.host or "127.0.0.1" in request.host):
+        ssl = ""
+
     try:
         soup = BeautifulSoup(data, 'html.parser')
         for script in soup.find_all('script'):
             script.extract()
+
+        # Inject SSL
+        soup.append(BeautifulSoup(ssl, 'html.parser'))
 
         html = str(soup)
     except Exception as e:
@@ -66,8 +73,9 @@ def render(data,db_object):
     except Exception as e:
         return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br><p>This can often be fixed by saving your site again in the editor</p><br>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
 
-
-    return render_template('city.html',html=html,bg_colour=bg_colour,text_colour=text_colour,
+    
+    
+    return render_template('city.html',bg_colour=bg_colour,text_colour=text_colour,
                             fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
                            hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
                            hns=hns,btc=btc,eth=eth, data=html)
