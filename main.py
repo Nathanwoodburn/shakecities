@@ -117,6 +117,7 @@ def edit():
     bg_colour = ""
     fg_colour = ""
     text_colour = ""
+    email = ""
 
     if 'data' in data:
         html = data['data'].encode('utf-8').decode('unicode-escape')
