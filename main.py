@@ -62,7 +62,7 @@ def index():
 @app.route('/signup', methods=['POST'])
 def signup():
     email = request.form['email']
-    domain = request.form['domain']
+    domain = request.form['domain'].lower()
     password = request.form['password']
 
     # Verify domain
