@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
 
-<body style="background: #000000;color: #ffffff;margin: auto;width: 95%;">
+<body style="background: #000000;color: #ffffff;width: 95%;margin: auto;">
     <section>
         <section style="height: 15vh;background: url(&quot;assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp&quot;) bottom / cover no-repeat;min-height: 130px;"></section>
         <section class="d-print-none d-lg-none d-xl-none d-xxl-none" style="width: 30vw;border-radius: 50%;background: #000000;padding: 20px;height: 30vw;margin: auto;margin-top: -15vw;display: flex;"><a href="/"><img class="img-fluid" src="assets/img/HNSW.png" width="100%"></a></section>
@@ -29,10 +29,14 @@
         <section class="d-none d-print-block d-lg-block d-xl-block d-xxl-block" style="width: 15vw;border-radius: 50%;background: #000000;padding: 20px;height: 15vw;margin: auto;display: flex;margin-top: -6vw;"><a href="/"><img class="img-fluid" src="assets/img/HNSW.png" width="100%"></a></section>
         <section class="d-none d-print-block d-lg-block d-xl-block d-xxl-block" style="height: 3em;"></section>
     </section>
-    <section style="margin-top: 50px;text-align: center;">
-        <h1>Welcome to ShakeCities</h1>
-        <p>Congratulations your site is ready for use.<br><br></p>
-        <div style="max-width: 10em;margin: auto;"><a class="btn btn-primary" role="button" href="https://{{site}}" style="display: block;margin: 10px;" target="_blank">Visit your site</a><a class="btn btn-primary" role="button" href="/edit" style="display: block;margin: 10px;">Edit your site</a><a class="btn btn-primary" role="button" href="/hnschat" style="display: block;margin: 10px;">Link HNSChat</a><a class="btn btn-primary" role="button" href="/logout" style="display: block;margin: 10px;">Logout</a></div>
+    <section style="margin-top: 50px;">
+        <h1 style="text-align: center;margin-bottom: 30px;">HNSChat</h1>
+    </section>
+    <section style="width: 80%;margin: auto;">
+        <p>Link your domain to HNSChat using Varo Auth.<br>1. Click Authenticate with Varo Auth<br>2. Enter {{domain}}<br>3. Copy TXT record (including the varo= part) into the below box and save<br>4. Verify your domain (it might take a few minutes for the cache to clear)</p>
+        <form method="post"><input class="form-control" type="text" style="margin-top: 10px;" name="hnschat" value="{{hnschat}}" placeholder="varo=....." required="" minlength="5">
+            <div style="text-align: center;"><input class="btn btn-primary" type="submit" style="margin-top: 10px;"></div>
+        </form>
     </section>
     <section style="margin: 20px;height: 40px;text-align: center;margin-top: 40px;">
         <div>

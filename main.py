@@ -8,6 +8,7 @@ import time
 from email_validator import validate_email, EmailNotValidError
 import accounts
 import db
+import varo
 
 app = Flask(__name__)
 dotenv.load_dotenv()
@@ -175,6 +176,8 @@ def send_edit():
     data['text_colour'] = request.form['text_colour']
     data['email'] = request.form['email']
 
+
+    varo.update_avatar(data['avatar'],user['domain'])
     # Convert to json
     data = json.dumps(data)
     db.update_website_data_raw(user['domain'],data)
@@ -199,6 +202,38 @@ def claim():
     domain = request.args.get('domain')
     return redirect('/signup?domain=' + domain)
 
+@app.route('/hnschat')
+def hnschat():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Invalid token')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    record = varo.get_auth(user['domain'])
+    return render_template('hnschat.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'],hnschat=record)
+
+@app.route('/hnschat', methods=['POST'])
+def save_hnschat():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Invalid token')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    record = request.form['hnschat']
+    varo.update_auth(record,user['domain'])    
+    
+    return redirect('/hnschat')
 
 
 @app.route('/<path:path>')

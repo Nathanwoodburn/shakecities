@@ -22,6 +22,7 @@ services:
       DB_PASSWORD: your-db-password
       DB_NAME: main
       CITY_DOMAIN: exampledomainnathan1
+      VARO: <your-varo-apikey>
       WORKERS: 2 # number of workers to run (should be 2 * number of cores)
 
   sites:
