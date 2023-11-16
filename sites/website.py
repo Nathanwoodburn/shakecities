@@ -26,6 +26,7 @@ def render(data,db_object):
         avatar = db_object['avatar']
         hnschat = db_object['hnschat']
         location = db_object['location']
+        email = db_object['email']
         hns = db_object['HNS']
         btc = db_object['BTC']
         eth = db_object['ETH']
@@ -37,11 +38,13 @@ def render(data,db_object):
             btc_icon = "assets/img/BTCW.png"
             eth_icon = "assets/img/ETHW.png"
             location_icon = "assets/img/mapw.png"
+            email_icon = "assets/img/emailw.png"
         else:
             hns_icon = "assets/img/HNS.png"
             btc_icon = "assets/img/BTC.png"
             eth_icon = "assets/img/ETH.png"
             location_icon = "assets/img/map.png"
+            email_icon = "assets/img/email.png"
 
         if hns != "":
             hns = "<img src='" + hns_icon + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns
@@ -50,9 +53,13 @@ def render(data,db_object):
         if eth != "":
             eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
         if hnschat != "":
-            hnschat = "<img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat
+            hnschat = "<a href='https://hns.chat/#message:"+hnschat+"' target='_blank'><img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat + "</a>"
         if location != "":
             location = "<img src='"+location_icon+"' width='20px' height='30px' style='margin-right: 5px;'>" + location
+        if email != "":
+            email = "<a href='mailto:"+email+"'><img src='"+email_icon+"' width='30px' height='20px' style='margin-right: 5px;margin-left:-10px;'>" + email + "</a>"
+
+        
 
 
 
@@ -62,7 +69,7 @@ def render(data,db_object):
 
     return render_template('city.html',html=html,bg_colour=bg_colour,text_colour=text_colour,
                             fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
-                           hnschat=hnschat,location=location, hns_icon=hns_icon,
+                           hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
                            hns=hns,btc=btc,eth=eth, data=html)
     
 

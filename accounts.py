@@ -92,6 +92,9 @@ def login(email,password):
     # Create a cookie
     token = generate_cookie()
     user['tokens'].append(token)
+    # Get the newest 2 tokens
+    user['tokens'] = user['tokens'][-2:]
+
     # Update user
     db.update_tokens(user['id'], user['tokens'])
     return {'success': True, 'message': 'Logged in', 'token': token}

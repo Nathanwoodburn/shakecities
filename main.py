@@ -138,9 +138,11 @@ def edit():
         fg_colour = data['fg_colour']
     if 'text_colour' in data:
         text_colour = data['text_colour']
+    if 'email' in data:
+        email = data['email']
 
     return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,
-                           hns=hns,btc=btc,eth=eth,hnschat=hnschat,location=location,avatar=avatar,
+                           hns=hns,btc=btc,eth=eth,hnschat=hnschat,email=email,location=location,avatar=avatar,
                            bg_colour=bg_colour,fg_colour=fg_colour,text_colour=text_colour,
                            CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
 
@@ -170,6 +172,7 @@ def send_edit():
     data['bg_colour'] = request.form['bg_colour']
     data['fg_colour'] = request.form['fg_colour']
     data['text_colour'] = request.form['text_colour']
+    data['email'] = request.form['email']
 
     # Convert to json
     data = json.dumps(data)
