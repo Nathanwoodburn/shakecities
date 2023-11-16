@@ -4,13 +4,16 @@ import dotenv
 
 dotenv.load_dotenv()
 zone = ""
+TLSA = ""
 varo_api = os.getenv('VARO')
 city_domain = os.getenv('CITY_DOMAIN')
+if city_domain == "localhost":
+    city_domain = "exampledomainnathan1"
 
+server_alias = os.getenv('CITY_ALIAS')
 
 def update_auth(auth,domain):
-    print("TXT: " + auth, "DOMAIN: " + domain, flush=True)
-
+    verify_ALIAS(domain)
     record = get_auth_id(domain)
     if record == "":
         data = {
@@ -53,7 +56,7 @@ def get_auth_id(domain):
     data = {
     "action": "getRecords",
     "zone": zone,
-    "name": "",
+    "name": domain + "." + city_domain,
     "type": "TXT",
     "content": ""
     }
@@ -77,7 +80,7 @@ def get_auth(domain):
     data = {
     "action": "getRecords",
     "zone": zone,
-    "name": "",
+    "name": domain + "." + city_domain,
     "type": "TXT",
     "content": ""
     }
@@ -96,6 +99,7 @@ def get_auth(domain):
 
 def get_zone():
     global zone
+    global TLSA
     url = "https://reg.woodburn.au/api"
     headers = {
         'Authorization': 'Bearer '+varo_api,
@@ -109,16 +113,31 @@ def get_zone():
     for domain in r['data']:
         if domain['name'] == city_domain:
             zone = domain['id']
-            return domain['id']
+    
+    data = {
+        "action": "getRecords",
+        "zone": zone,
+        "name": "*."+city_domain,
+        "type": "TLSA",
+        "content": ""
+    }
+    r = requests.post(url, headers=headers, json=data)
+    print(r.text)
+    r = r.json()
+    for record in r['data']:
+        TLSA = record['content']
+    return zone
+
         
 def update_avatar(avatar,domain):
+    verify_ALIAS(domain)
     if zone == "":
         get_zone()
 
     data = {
     "action": "getRecords",
     "zone": zone,
-    "name": "",
+    "name": domain + "." + city_domain,
     "type": "TXT",
     "content": ""
     }
@@ -166,3 +185,42 @@ def update_avatar(avatar,domain):
     r = requests.post(url, headers=headers, json=data)
     return r.text
     
+def verify_ALIAS(domain):
+    if zone == "":
+        get_zone()
+
+    data = {
+    "action": "getRecords",
+    "zone": zone,
+    "name": domain+"."+city_domain,
+    "type": "ALIAS",
+    "content": ""
+    }
+    url = "https://reg.woodburn.au/api"
+    headers = {
+        'Authorization': 'Bearer '+varo_api,
+        'Content-Type': 'application/json'
+    }
+    r = requests.post(url, headers=headers, json=data)
+    r = r.json()
+    if 'data' in r:
+        return
+
+    data = {
+        "action": "addRecord",
+        "zone": zone,
+        "type": "ALIAS",
+        "name": domain,
+        "content": server_alias,
+        }
+    r = requests.post(url, headers=headers, json=data)
+    data = {
+        "action": "addRecord",
+        "zone": zone,
+        "type": "TLSA",
+        "name": "_443._tcp."+domain+"."+city_domain,
+        "content": TLSA,
+        }
+    r = requests.post(url, headers=headers, json=data)
+    print(r.text)
+    return r.text
