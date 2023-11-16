@@ -64,6 +64,11 @@ def signup():
     email = request.form['email']
     domain = request.form['domain']
     password = request.form['password']
+
+    # Verify domain
+    if domain.startswith('_'):
+        return error('Invalid domain')
+
     try:
         valid = validate_email(email)
         email = valid.email
