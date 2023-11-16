@@ -138,6 +138,8 @@ def edit():
         bg_colour = data['bg_colour']
     if 'fg_colour' in data:
         fg_colour = data['fg_colour']
+    else:
+        fg_colour = "#ffffff"
     if 'text_colour' in data:
         text_colour = data['text_colour']
     if 'email' in data:
