@@ -22,7 +22,8 @@ services:
       DB_PASSWORD: your-db-password
       DB_NAME: main
       CITY_DOMAIN: exampledomainnathan1
-      VARO: <your-varo-apikey>
+      REG_KEY: <your-varo-apikey>
+      CITY_ALIAS: city.hnshosting.au # ICANN domain that points to the IP for the cities server
       WORKERS: 2 # number of workers to run (should be 2 * number of cores)
 
   sites:

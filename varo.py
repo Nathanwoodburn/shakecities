@@ -5,7 +5,7 @@ import dotenv
 dotenv.load_dotenv()
 zone = ""
 TLSA = ""
-varo_api = os.getenv('VARO')
+REG_KEY = os.getenv('REG_KEY')
 city_domain = os.getenv('CITY_DOMAIN')
 if city_domain == "localhost":
     city_domain = "exampledomainnathan1"
@@ -42,7 +42,7 @@ def update_auth(auth,domain):
     # Update TXT record
     url = "https://reg.woodburn.au/api"
     headers = {
-        'Authorization': 'Bearer '+varo_api,
+        'Authorization': 'Bearer '+REG_KEY,
         'Content-Type': 'application/json'
     }
     r = requests.put(url, headers=headers, json=data)
@@ -62,7 +62,7 @@ def get_auth_id(domain):
     }
     url = "https://reg.woodburn.au/api"
     headers = {
-        'Authorization': 'Bearer '+varo_api,
+        'Authorization': 'Bearer '+REG_KEY,
         'Content-Type': 'application/json'
     }
     r = requests.post(url, headers=headers, json=data)
@@ -87,7 +87,7 @@ def get_auth(domain):
     }
     url = "https://reg.woodburn.au/api"
     headers = {
-        'Authorization': 'Bearer '+varo_api,
+        'Authorization': 'Bearer '+REG_KEY,
         'Content-Type': 'application/json'
     }
     r = requests.post(url, headers=headers, json=data)
@@ -105,7 +105,7 @@ def get_zone():
     global TLSA
     url = "https://reg.woodburn.au/api"
     headers = {
-        'Authorization': 'Bearer '+varo_api,
+        'Authorization': 'Bearer '+REG_KEY,
         'Content-Type': 'application/json'
     }
     data = {
@@ -146,7 +146,7 @@ def update_avatar(avatar,domain):
     }
     url = "https://reg.woodburn.au/api"
     headers = {
-        'Authorization': 'Bearer '+varo_api,
+        'Authorization': 'Bearer '+REG_KEY,
         'Content-Type': 'application/json'
     }
     r = requests.post(url, headers=headers, json=data)
@@ -202,7 +202,7 @@ def verify_ALIAS(domain):
     }
     url = "https://reg.woodburn.au/api"
     headers = {
-        'Authorization': 'Bearer '+varo_api,
+        'Authorization': 'Bearer '+REG_KEY,
         'Content-Type': 'application/json'
     }
     r = requests.post(url, headers=headers, json=data)
