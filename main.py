@@ -10,6 +10,7 @@ import accounts
 import db
 import varo
 import re
+import avatar
 
 app = Flask(__name__)
 dotenv.load_dotenv()
@@ -22,9 +23,13 @@ dbargs = {
     'database':os.getenv('DB_NAME')
 }
 
+
 CITY_DOMAIN = os.getenv('CITY_DOMAIN')
 if CITY_DOMAIN == None:
     CITY_DOMAIN = "exampledomainnathan1"
+IMAGE_LOCATION = os.getenv('IMAGE_LOCATION')
+if IMAGE_LOCATION == None:
+    IMAGE_LOCATION = "/data"
 
 random_sites = ""
 
@@ -32,6 +37,10 @@ random_sites = ""
 @app.route('/assets/<path:path>')
 def assets(path):
     return send_from_directory('templates/assets', path)
+
+@app.route('/avatar/<path:path>')
+def avatar_view(path):
+    return send_from_directory(IMAGE_LOCATION, path)
 
 
 def error(message):
@@ -243,6 +252,50 @@ def save_hnschat():
     
     return redirect('/hnschat')
 
+@app.route('/upload', methods=['POST'])
+def upload_avatar():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+
+    if 'file' not in request.files:
+        return error('We couldn\'t find a file in your request')
+    file = request.files['file']
+
+    if file.filename == '':
+        return error('We couldn\'t find a file in your request')
+
+    if file and avatar.allowed_file(file.filename):
+        # Save the file to the upload folder
+        avatar.save_avatar(file,user['domain'])
+        return redirect('/edit')
+        
+
+    return error('Sorry we couldn\'t upload your file')
+
+@app.route('/avatar/clear')
+def avatar_clear():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+
+    avatar.clear(user['domain'])
+    return redirect('/edit')
+
 
 @app.route('/<path:path>')
 def catch_all(path):
@@ -281,6 +334,7 @@ def catch_all(path):
     if os.path.isfile('templates/' + path + '.html'):
         return render_template(path + '.html',account=account,account_link=account_link,account_link_name=account_link_name,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
     return redirect('/') # 404 catch all
+
 
 # 404 catch all
 @app.errorhandler(404)
