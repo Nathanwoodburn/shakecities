@@ -35,7 +35,7 @@ def assets(path):
 
 
 def error(message):
-    return jsonify({'success': False, 'message': message}), 400
+    return render_template('error.html', message=message)
 
 @app.route('/')
 def index():
@@ -67,10 +67,8 @@ def signup():
     password = request.form['password']
 
     # Verify domain
-    if domain.startswith('_') or domain.endswith('_'):
-        return error('Invalid domain')
     if not re.match("^[a-z0-9]*$", domain):
-        return error('Invalid domain')
+        return error('Sorry domain can only contain lowercase letters and numbers')
 
     try:
         valid = validate_email(email)
@@ -106,7 +104,7 @@ def edit():
 
     token = request.cookies['token']
     if not accounts.validate_token(token):
-        return error('Invalid token')
+        return error('Sorry we had an issue verifying your account')
     # Verify token
     user = accounts.validate_token(token)
     if not user:
@@ -163,7 +161,7 @@ def edit():
 def send_edit():
     token = request.cookies['token']
     if not accounts.validate_token(token):
-        return error('Invalid token')
+        return error('Sorry we had an issue verifying your account')
     # Verify token
     user = accounts.validate_token(token)
     if not user:
@@ -199,7 +197,7 @@ def send_edit():
 def logout():
     token = request.cookies['token']
     if not accounts.logout(token)['success']:
-        return error('Invalid token')
+        return error('Sorry we had an issue verifying your account')
     
     # Remove cookie
     resp = make_response(redirect('/'))
@@ -216,7 +214,7 @@ def claim():
 def hnschat():
     token = request.cookies['token']
     if not accounts.validate_token(token):
-        return error('Invalid token')
+        return error('Sorry we had an issue verifying your account')
     # Verify token
     user = accounts.validate_token(token)
     if not user:
@@ -231,7 +229,7 @@ def hnschat():
 def save_hnschat():
     token = request.cookies['token']
     if not accounts.validate_token(token):
-        return error('Invalid token')
+        return error('Sorry we had an issue verifying your account')
     # Verify token
     user = accounts.validate_token(token)
     if not user:

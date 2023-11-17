@@ -33,8 +33,12 @@ def generate_cookie():
 
 # Create a new user
 def create_user(email, domain, password):
-    if len(email) < 4 or len(domain) < 4 or len(password) < 4:
-        return {'success': False, 'message': 'Invalid email, domain, or password'}
+    if len(email) < 4:
+        return {'success': False, 'message': 'Unfortunatly your email is not valid'}
+    if len(domain) < 4: 
+        return {'success': False, 'message': 'We only allow domains with 4 or more characters'}
+    if len(password) < 4:
+        return {'success': False, 'message': 'Your password is not complex enough'}
 
 
     # Hash password
@@ -52,13 +56,13 @@ def create_user(email, domain, password):
 
     # Check if user exists
     if db.search_users(email) != []:
-        return {'success': False, 'message': 'User already exists'}
+        return {'success': False, 'message': 'It looks like someone already is using that email address'}
     
     if db.search_users_domain(domain) != []:
-        return {'success': False, 'message': 'Domain already exists'}
+        return {'success': False, 'message': 'Someone has already claimed that domain'}
 
     db.add_user(email, domain, hashed_password, token)
-    return {'success': True, 'message': 'User created', 'token': token}
+    return {'success': True, 'message': 'Congrats on creating an account', 'token': token}
 
 def validate_token(token):
     search = db.search_users_token(token)
@@ -83,11 +87,11 @@ def login(email,password):
     # Verify email
     search = db.search_users(email)
     if search == []:
-        return {'success': False, 'message': 'Invalid email'}
+        return {'success': False, 'message': 'Sorry, we couldn\'t find your account<br>Check your email and password'}
     user = convert_db_users(search[0])
     # Verify password
     if not verify_password(password, user['password']):
-        return {'success': False, 'message': 'Invalid password'}
+        return {'success': False, 'message': 'Sorry, we couldn\'t find your account<br>Check your email and password'}
     
     # Create a cookie
     token = generate_cookie()
