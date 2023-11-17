@@ -24,7 +24,7 @@ def get_website_data(domain):
     connection.close()
     
     if data == []:
-        return ""
+        return False
     
     parsed = data[0][2]
     parsed = json.loads(parsed)

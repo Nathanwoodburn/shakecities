@@ -8,7 +8,7 @@ if os.getenv('MAIN_DOMAIN') != None:
     main_domain = os.getenv('MAIN_DOMAIN')
 
 def render(data,db_object):
-    if data == "":
+    if data == False:
         return redirect("https://" + main_domain + '/claim?domain=' + request.host.split('.')[0])
     
     # Render as HTML
