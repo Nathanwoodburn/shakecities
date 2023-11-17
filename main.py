@@ -9,6 +9,7 @@ from email_validator import validate_email, EmailNotValidError
 import accounts
 import db
 import varo
+import re
 
 app = Flask(__name__)
 dotenv.load_dotenv()
@@ -66,7 +67,9 @@ def signup():
     password = request.form['password']
 
     # Verify domain
-    if domain.startswith('_'):
+    if domain.startswith('_') or domain.endswith('_'):
+        return error('Invalid domain')
+    if not re.match("^[a-z0-9]*$", domain):
         return error('Invalid domain')
 
     try:
