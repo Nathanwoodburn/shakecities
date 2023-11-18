@@ -4,6 +4,7 @@ import db
 import random
 import json
 import varo
+import re
 
 
 IMAGE_LOCATION = os.getenv('IMAGE_LOCATION')
@@ -25,7 +26,10 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def save_avatar(file,owner):
-    filename = file.filename
+    filename = re.sub(r'[^a-zA-Z0-9]', '', filename).lower()
+
+
+
     while os.path.exists(f"{IMAGE_LOCATION}/{filename}"):
         filename = f"{random.randint(0,1000000)}-{filename}"
     file.save(f"{IMAGE_LOCATION}/{filename}")
