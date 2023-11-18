@@ -41,6 +41,11 @@ def render(data,db_object):
         location = db_object['location']
         email = db_object['email']
         hns = db_object['HNS']
+
+        if 'hip2_display' in db_object:
+            if db_object['hip2_display'] == True:
+                hns = "@"+request.host
+
         btc = db_object['BTC']
         eth = db_object['ETH']
         bg_colour = db_object['bg_colour']

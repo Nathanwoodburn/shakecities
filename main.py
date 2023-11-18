@@ -137,7 +137,7 @@ def edit():
     fg_colour = ""
     text_colour = ""
     email = ""
-    template = ""
+    hip2_display = False
 
     if 'data' in data:
         html = data['data'].encode('utf-8').decode('unicode-escape')
@@ -174,11 +174,14 @@ def edit():
     else:
         selected_template = templates[0]
 
+    if 'hip2_display' in data:
+        hip2_display = data['hip2_display']
+
 
     return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,
                            hns=hns,btc=btc,eth=eth,hnschat=hnschat,email=email,location=location,avatar=avatar,
                            bg_colour=bg_colour,fg_colour=fg_colour,text_colour=text_colour,templates=templates,
-                           selected_template=selected_template,CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
+                           selected_template=selected_template,CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'],hip2_display=hip2_display)
 
 
 @app.route('/edit', methods=['POST'])
@@ -207,6 +210,11 @@ def send_edit():
     data['text_colour'] = request.form['text_colour']
     data['email'] = request.form['email']
     data['template'] = request.form['template']
+
+    if 'hip2_display' in request.form:
+        data['hip2_display'] = True
+    else:
+        data['hip2_display'] = False
 
     # Convert to json
     data = json.dumps(data)
