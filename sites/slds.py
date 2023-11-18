@@ -54,17 +54,20 @@ def catch_all(path):
 def not_found(e):
     return redirect('/')
 
-def clean_template():
+def clean_templates():
     # Clean template
-    with open('templates/city.html') as f:
-        data = f.read()
-    
-    data = data.replace('#f1ffff', '{{fg_colour}}')
-    data = data.replace('#1fffff', '{{text_colour}}')
-    data = data.replace('#000000', '{{bg_colour}}')
-    # Save
-    with open('templates/city.html', 'w') as f:
-        f.write(data)
+    for file in os.listdir('templates'):
+        if file.endswith('.html'):
+            with open('templates/' + file) as f:
+                data = f.read()
+            
+            data = data.replace('#f1ffff', '{{fg_colour}}')
+            data = data.replace('#1fffff', '{{text_colour}}')
+            data = data.replace('#000000', '{{bg_colour}}')
+            # Save
+            with open('templates/' + file, 'w') as f:
+                f.write(data)
+            print("Cleaned " + file, flush=True)
     print("Cleaned template", flush=True)
 
 if __name__ == '__main__':

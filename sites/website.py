@@ -66,9 +66,17 @@ def render(data,db_object):
         if email != "":
             email = "<a href='mailto:"+email+"'><img src='"+email_icon+"' width='30px' height='20px' style='margin-right: 5px;margin-left:-10px;'>" + email + "</a>"
 
-        
+        if avatar != "":
+            avatar = "<img src='"+avatar+"' width='200vw' height='200vw' style='border-radius: 50%;margin-right: 5px;'>"
+        else:
+            avatar = "<h1>" + request.host.split(':')[0] + "/</h1>"
 
-
+        if 'template' in db_object:
+            if db_object['template'] != "":
+                return render_template(get_template(db_object['template']),bg_colour=bg_colour,text_colour=text_colour,
+                            fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
+                           hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
+                           hns=hns,btc=btc,eth=eth, data=html)
 
     except Exception as e:
         return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br><p>This can often be fixed by saving your site again in the editor</p><br>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
@@ -120,3 +128,9 @@ def generate_foreground_color(background_color):
     
 def rgb_to_hex(rgb_color):
     return "#{:02x}{:02x}{:02x}".format(*rgb_color)
+
+def get_template(template):
+    if template == "Original":
+        return "city-old.html"
+    
+    return "city.html"

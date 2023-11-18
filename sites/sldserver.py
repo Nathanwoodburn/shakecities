@@ -25,7 +25,7 @@ class GunicornApp(BaseApplication):
 
 if __name__ == '__main__':
     print("Cleaning template...", flush=True)
-    slds.clean_template()
+    slds.clean_templates()
     workers = os.getenv('WORKERS')
     threads = os.getenv('THREADS')
     if workers is None:

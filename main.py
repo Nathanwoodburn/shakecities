@@ -33,6 +33,9 @@ if IMAGE_LOCATION == None:
 
 random_sites = ""
 
+# Templates available for user
+templates = ['Standard', 'Original']
+
 #Assets routes
 @app.route('/assets/<path:path>')
 def assets(path):
@@ -134,6 +137,7 @@ def edit():
     fg_colour = ""
     text_colour = ""
     email = ""
+    template = ""
 
     if 'data' in data:
         html = data['data'].encode('utf-8').decode('unicode-escape')
@@ -165,10 +169,14 @@ def edit():
     if 'email' in data:
         email = data['email']
 
+    if 'template' in data:
+        selected_template = data['template']
+
+
     return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,
                            hns=hns,btc=btc,eth=eth,hnschat=hnschat,email=email,location=location,avatar=avatar,
-                           bg_colour=bg_colour,fg_colour=fg_colour,text_colour=text_colour,
-                           CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
+                           bg_colour=bg_colour,fg_colour=fg_colour,text_colour=text_colour,templates=templates,
+                           selected_template=selected_template,CITY_DOMAIN=CITY_DOMAIN,domain=user['domain'])
 
 
 @app.route('/edit', methods=['POST'])
@@ -196,6 +204,7 @@ def send_edit():
     data['fg_colour'] = request.form['fg_colour']
     data['text_colour'] = request.form['text_colour']
     data['email'] = request.form['email']
+    data['template'] = request.form['template']
 
     # Convert to json
     data = json.dumps(data)
