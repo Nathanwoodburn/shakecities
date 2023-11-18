@@ -59,6 +59,11 @@ def render(data,db_object):
             btc = "<img src='" + btc_icon + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc
         if eth != "":
             eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
+
+        hide_addresses = False
+        if hns == "" and btc == "" and eth == "":
+            hide_addresses = True
+        
         if hnschat != "":
             hnschat = "<a href='https://hns.chat/#message:"+hnschat+"' target='_blank'><img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat + "</a>"
         if location != "":
@@ -71,24 +76,43 @@ def render(data,db_object):
         else:
             avatar = "<h1 style='color:"+fg_colour+";'>" + request.host.split(':')[0] + "/</h1>"
 
+        template = "Standard"
+
         if 'template' in db_object:
             if db_object['template'] != "":
-                return render_template(get_template(db_object['template']),bg_colour=bg_colour,text_colour=text_colour,
-                            fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
-                           hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
-                           hns=hns,btc=btc,eth=eth, data=html)
+                template = db_object['template']
+
+        if hide_addresses:
+            return render_template_string(get_template_without_address(template),bg_colour=bg_colour,text_colour=text_colour,
+                    fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
+                    hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
+                    hns=hns,btc=btc,eth=eth, data=html)
+        else:
+            return render_template(get_template_file(template),bg_colour=bg_colour,text_colour=text_colour,
+                    fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
+                    hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
+                    hns=hns,btc=btc,eth=eth, data=html)
 
     except Exception as e:
-        return "<h1>Invalid data</h1><br><h2>Please contact support</h2><br><p>This can often be fixed by saving your site again in the editor</p><br>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
-
-    
-    
-    return render_template('city.html',bg_colour=bg_colour,text_colour=text_colour,
-                            fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
-                           hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
-                           hns=hns,btc=btc,eth=eth, data=html)
+        return "<h1>Nothing here yet</h1>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
     
 
+
+def get_template_without_address(template):
+    file = "templates/" +get_template_file(template)
+    with open(file) as f:
+        data = f.read()
+
+    # Read template
+    soup = BeautifulSoup(data, 'html.parser')
+    # Remove addresses div
+    try:
+        addresses = soup.find(id="addresses")
+        addresses.decompose()
+    finally:
+        # Return template without addresses
+        return str(soup)
+        
 
 def calculate_contrast_ratio(color1, color2):
     def calculate_luminance(color):
@@ -129,7 +153,7 @@ def generate_foreground_color(background_color):
 def rgb_to_hex(rgb_color):
     return "#{:02x}{:02x}{:02x}".format(*rgb_color)
 
-def get_template(template):
+def get_template_file(template):
     if template == "Original":
         return "city-old.html"
     
