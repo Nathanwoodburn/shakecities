@@ -26,7 +26,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def save_avatar(file,owner):
-    filename = re.sub(r'[^a-zA-Z0-9]', '', filename).lower()
+    filename = re.sub(r'[^a-zA-Z0-9]', '', file.filename).lower()
 
 
 
