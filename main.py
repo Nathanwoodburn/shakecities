@@ -199,17 +199,20 @@ def send_edit():
     
     # Json data
     data = db.get_website_data_raw(user['domain'])
-    data['data'] = request.form['data']
-    data['HNS'] = request.form['hns']
-    data['BTC'] = request.form['btc']
-    data['ETH'] = request.form['eth']
-    data['hnschat'] = request.form['hnschat']
-    data['location'] = request.form['location']
-    data['bg_colour'] = request.form['bg_colour']
-    data['fg_colour'] = request.form['fg_colour']
-    data['text_colour'] = request.form['text_colour']
-    data['email'] = request.form['email']
-    data['template'] = request.form['template']
+    data['data'] = request.form['data'].strip()
+    data['HNS'] = request.form['hns'].strip()
+    data['BTC'] = request.form['btc'].strip()
+    data['ETH'] = request.form['eth'].strip()
+    data['hnschat'] = request.form['hnschat'].strip()
+
+    data['hnschat'] = data['hnschat'].replace("/","").strip()
+
+    data['location'] = request.form['location'].strip()
+    data['bg_colour'] = request.form['bg_colour'].strip()
+    data['fg_colour'] = request.form['fg_colour'].strip()
+    data['text_colour'] = request.form['text_colour'].strip()
+    data['email'] = request.form['email'].strip()
+    data['template'] = request.form['template'].strip()
 
     if 'hip2_display' in request.form:
         data['hip2_display'] = True

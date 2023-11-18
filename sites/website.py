@@ -74,7 +74,7 @@ def render(data,db_object):
             hide_addresses = True
         
         if hnschat != "":
-            hnschat = "<a href='https://hns.chat/#message:"+hnschat+"' target='_blank'><img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat + "</a>"
+            hnschat = "<a href='https://hns.chat/#message:"+hnschat+"' target='_blank'><img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat + "/</a>"
         if location != "":
             location = "<img src='"+location_icon+"' width='20px' height='30px' style='margin-right: 5px;'>" + location
         if email != "":
