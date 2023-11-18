@@ -69,7 +69,7 @@ def render(data,db_object):
         if avatar != "":
             avatar = "<img src='"+avatar+"' width='200vw' height='200vw' style='border-radius: 50%;margin-right: 5px;'>"
         else:
-            avatar = "<h1 class='color:"+fg_colour+";'>" + request.host.split(':')[0] + "/</h1>"
+            avatar = "<h1 style='color:"+fg_colour+";'>" + request.host.split(':')[0] + "/</h1>"
 
         if 'template' in db_object:
             if db_object['template'] != "":
