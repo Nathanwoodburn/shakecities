@@ -125,7 +125,6 @@ def get_zone():
         "content": ""
     }
     r = requests.post(url, headers=headers, json=data)
-    print(r.text)
     r = r.json()
     for record in r['data']:
         TLSA = record['content']
@@ -160,7 +159,6 @@ def update_avatar(avatar,domain):
                         print("Avatar already set", flush=True)
                         return "Avatar already set"
                     record_id = record['uuid']
-
     if record_id == "":
         data = {
         "action": "addRecord",
@@ -173,7 +171,7 @@ def update_avatar(avatar,domain):
         data = {
         "action": "updateRecord",
         "zone": zone,
-        "record": record,
+        "record": record_id,
         "column": "content",
         "value": "profile avatar=" + avatar
         }
@@ -185,7 +183,6 @@ def update_avatar(avatar,domain):
         "zone": zone,
         "record": record_id
         }
-
     r = requests.post(url, headers=headers, json=data)
     return r.text
     
@@ -226,5 +223,4 @@ def verify_ALIAS(domain):
         "content": TLSA,
         }
     r = requests.post(url, headers=headers, json=data)
-    print(r.text)
     return r.text
