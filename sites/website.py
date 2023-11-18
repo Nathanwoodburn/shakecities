@@ -153,8 +153,14 @@ def generate_foreground_color(background_color):
 def rgb_to_hex(rgb_color):
     return "#{:02x}{:02x}{:02x}".format(*rgb_color)
 
+
+
 def get_template_file(template):
     if template == "Original":
-        return "city-old.html"
+        return "city_old.html"
+    elif template == "No card around data":
+        return "city_no_card.html"
+    elif template == "No card around data (2)":
+        return "city_no_card_2.html"
     
     return "city.html"

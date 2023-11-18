@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html style="width: 100vw;height: 99vh;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ShakeCities</title>
+    <meta name="twitter:description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <meta name="description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://shakecities.com/assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp">
+    <meta property="og:title" content="ShakeCities">
+    <meta name="twitter:title" content="ShakeCities">
+    <meta name="twitter:image" content="https://shakecities.com/assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp">
+    <meta property="og:description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNSW.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNSW.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<!-- Template colours
+#f1ffff foreground colour
+#1fffff text colour
+#000000 background colour
+
+These colours will be overriden with the user's colour scheme
+-->
+
+<body style="height: 99vh;width: 100vw;color: #1fffff;background: #000000;overflow-x: hidden;">
+    <div class="text-center" style="margin: 10px;">
+        <div>{{avatar|safe}}</div> <!-- This needs the safe filter to allow HTML to be rendered -->
+        <div style="color: #f1ffff;">
+                <p style="font-size: 24px;">{{hnschat|safe}}</p>
+                <p style="font-size: 24px;">{{email|safe}}</p>
+                <p style="font-size: 24px;">{{location|safe}}</p>
+        </div>
+    </div>
+    <div style="padding: 2%;margin: 22px;">
+        <p style="font-size: 24px;">
+            {{data|safe}} <!-- This needs the safe filter to allow HTML to be rendered -->
+        </p>
+    </div>
+    <div class="text-center" id="addresses" style="background: #f1ffff;padding: 25px;border-radius: 10px;margin: 22px;"> <!-- Adding the id addresses will remove this div from the page when the user doesn't have any addresses -->
+        <h1>Donate</h1>
+        <div>
+            <p style="font-size: 24px;margin-bottom: 0px;"><a href="/.well-known/wallets/HNS" target="_blank">{{hns|safe}}</a></p>
+            <p style="font-size: 24px;margin-bottom: 0px;"><a href="/.well-known/wallets/BTC" target="_blank">{{btc|safe}}</a></p>
+            <p style="font-size: 24px;margin-bottom: 0px;"><a href="/.well-known/wallets/ETH" target="_blank">{{eth|safe}}</a></p>
+        </div>
+    </div>
+
+    <!-- Footer to display the powered by ShakeCities. Probs best to leave as is -->
+    <div class="d-flex justify-content-xl-start align-items-xl-center" style="margin-right: 1%;margin-left: 1%;height: 6%;margin-top: 0.5%;">
+        <div class="d-inline-block d-print-inline-block d-sm-none d-md-none d-lg-none d-xl-inline-block d-xxl-inline-block" style="display: inline-flex;width: 3vw;height: 3vw;background: #f1ffff;padding: 4px;border-radius: 50%;"><img src="{{hns_icon}}" width="100%" height="100%"></div>
+        <div class="d-xl-flex align-items-xl-center" style="display: inline-flex;padding: 1%;height: 100%;margin-left: 2%;">
+            <p class="align-self-baseline" style="color: #f1ffff;">Powered by <a href="https://{{main_domain}}" target="_blank">ShakeCities</a></p>
+        </div>
+    </div>
+    <div style="height: 10px;"></div> <!-- This is here to give a bit more room at the bottom -->
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+</body>
+
+</html>

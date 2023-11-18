@@ -34,7 +34,7 @@ if IMAGE_LOCATION == None:
 random_sites = ""
 
 # Templates available for user
-templates = ['Standard', 'Original']
+templates = ['Standard', 'Original', 'No card around data', 'No card around data (2)']
 
 #Assets routes
 @app.route('/assets/<path:path>')
