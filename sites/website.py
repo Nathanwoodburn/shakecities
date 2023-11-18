@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import os
 import dotenv
 
-main_domain = "cities.hnshosting.au"
+main_domain = "shakecities.com"
 if os.getenv('MAIN_DOMAIN') != None:
     main_domain = os.getenv('MAIN_DOMAIN')
 
@@ -15,6 +15,8 @@ if os.path.exists("parts/footer.html"):
 def render(data,db_object):
     if data == False:
         return redirect("https://" + main_domain + '/claim?domain=' + request.host.split('.')[0])
+    elif data == "":
+        return redirect("https://" + main_domain + '/empty_site')
     
     # Render as HTML
     html = ""
@@ -24,16 +26,12 @@ def render(data,db_object):
 
     try:
         soup = BeautifulSoup(data, 'html.parser')
-
-        # for script in soup.find_all('script'):
-        #     script.extract()
-
         # Inject SSL
         soup.append(BeautifulSoup(ssl, 'html.parser'))
 
         html = str(soup)
     except Exception as e:
-        return "<h1>Invalid HTML</h1><br>" + str(e)
+        return redirect("https://" + main_domain + '/empty_site')
     
     try:
         avatar = db_object['avatar']
@@ -106,7 +104,7 @@ def render(data,db_object):
                     hns=hns,btc=btc,eth=eth, data=html,footer=footer)
 
     except Exception as e:
-        return "<h1>Nothing here yet</h1>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
+        return redirect("https://" + main_domain + '/empty_site')
 
 def get_template(template,hide_addresses=False):
     file = "templates/" +get_template_file(template)
