@@ -56,14 +56,8 @@ These colours will be overriden with the user's colour scheme
         </div>
     </div>
 
-    <!-- Footer to display the powered by ShakeCities. Probs best to leave as is -->
-    <div class="d-flex justify-content-xl-start align-items-xl-center" style="margin-right: 1%;margin-left: 1%;height: 6%;margin-top: 0.5%;">
-        <div class="d-inline-block d-print-inline-block d-sm-none d-md-none d-lg-none d-xl-inline-block d-xxl-inline-block" style="display: inline-flex;width: 3vw;height: 3vw;background: #f1ffff;padding: 4px;border-radius: 50%;"><img src="{{hns_icon}}" width="100%" height="100%"></div>
-        <div class="d-xl-flex align-items-xl-center" style="display: inline-flex;padding: 1%;height: 100%;margin-left: 2%;">
-            <p class="align-self-baseline" style="color: #f1ffff;">Powered by <a href="https://{{main_domain}}" target="_blank">ShakeCities</a></p>
-        </div>
-    </div>
-    <div style="height: 10px;"></div> <!-- This is here to give a bit more room at the bottom -->
+    <!-- Footer to display the powered by ShakeCities. -->
+    {{footer|safe}}
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/script.min.js"></script>
 </body>

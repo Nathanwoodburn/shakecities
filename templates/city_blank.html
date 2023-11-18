@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en" style="width: 100vw;height: 99vh;">
+<html style="width: 100vw;height: 99vh;">
 
 <head>
     <meta charset="utf-8">
@@ -25,46 +25,32 @@
     <link rel="stylesheet" href="assets/css/styles.min.css">
 </head>
 
+<!-- Template colours
+#f1ffff foreground colour
+#1fffff text colour
+#000000 background colour
+
+These colours will be overriden with the user's colour scheme
+-->
+
 <body style="height: 99vh;width: 100vw;color: #1fffff;background: #000000;overflow-x: hidden;">
-    <div style="margin: 10px;">
-        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-2 row-cols-xxl-2 justify-content-center align-items-center" style="margin: 0px;">
-            <div class="col text-center align-self-center m-auto">
-                <div class="d-xl-flex align-items-xl-center" style="background: #f1ffff;padding: 10px;border-radius: 10px;">
-                    <div>{{avatar|safe}}</div>
-                    <div class="d-none d-sm-none d-md-none d-lg-none d-xl-block d-xxl-block" style="width: 40px;"></div>
-                    <div>
-                        <div>
-                            <p style="font-size: 24px;">{{hnschat|safe}}</p>
-                        </div>
-                        <div>
-                            <p style="font-size: 24px;">{{email|safe}}</p>
-                        </div>
-                        <div>
-                            <p style="font-size: 24px;">{{location|safe}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col text-center align-self-center m-auto">
-                <div class="d-xl-flex align-items-xl-center" id="addresses" style="background: #f1ffff;padding: 10px;border-radius: 10px;">
-                    <div>
-                        <div>
-                            <p style="font-size: 24px;margin-bottom: 0px;"><a href="/.well-known/wallets/HNS" target="_blank">{{hns|safe}}</a></p>
-                        </div>
-                        <div>
-                            <p style="font-size: 24px;margin-bottom: 0px;"><a href="/.well-known/wallets/BTC" target="_blank">{{btc|safe}}</a></p>
-                        </div>
-                        <div>
-                            <p style="font-size: 24px;margin-bottom: 0px;"><a href="/.well-known/wallets/ETH" target="_blank">{{eth|safe}}</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- <div class="text-center" style="margin: 10px;">
+        <div>{{avatar|safe}}</div>  This needs the safe filter to allow HTML to be rendered 
+        <div style="color: #f1ffff;">
+                <p style="font-size: 24px;">{{hnschat|safe}}</p>
+                <p style="font-size: 24px;">{{email|safe}}</p>
+                <p style="font-size: 24px;">{{location|safe}}</p>
         </div>
     </div>
-    <div style="background: #f1ffff;border-radius: 10px;padding-top: 2%;padding-left: 2%;padding-right: 2%;padding-bottom: 2%;margin: 22px;">
-        <p style="font-size: 24px;">{{data|safe}}</p>
-    </div>{{footer | safe}}
+    <div style="padding: 2%;margin: 22px;">
+        <p style="font-size: 24px;">
+            
+        </p>
+    </div> -->
+
+    {{data|safe}} <!-- This needs the safe filter to allow HTML to be rendered -->
+    <!-- Footer to display the powered by ShakeCities. -->
+    {{footer|safe}}
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/script.min.js"></script>
 </body>

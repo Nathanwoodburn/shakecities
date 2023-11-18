@@ -1,4 +1,4 @@
-from flask import Flask, make_response, redirect, render_template_string, request, jsonify, render_template, send_from_directory
+from flask import Flask, redirect, render_template_string, request
 from bs4 import BeautifulSoup
 import os
 import dotenv
@@ -6,6 +6,11 @@ import dotenv
 main_domain = "cities.hnshosting.au"
 if os.getenv('MAIN_DOMAIN') != None:
     main_domain = os.getenv('MAIN_DOMAIN')
+
+FOOTER=""
+if os.path.exists("parts/footer.html"):
+    with open("parts/footer.html") as f:
+        FOOTER = f.read()
 
 def render(data,db_object):
     if data == False:
@@ -19,8 +24,9 @@ def render(data,db_object):
 
     try:
         soup = BeautifulSoup(data, 'html.parser')
-        for script in soup.find_all('script'):
-            script.extract()
+
+        # for script in soup.find_all('script'):
+        #     script.extract()
 
         # Inject SSL
         soup.append(BeautifulSoup(ssl, 'html.parser'))
@@ -82,23 +88,22 @@ def render(data,db_object):
             if db_object['template'] != "":
                 template = db_object['template']
 
+        footer = render_template_string(FOOTER,main_domain=main_domain,fg_colour=fg_colour,hns_icon=hns_icon)
         if hide_addresses:
-            return render_template_string(get_template_without_address(template),bg_colour=bg_colour,text_colour=text_colour,
+            return render_template_string(get_template(template,True),bg_colour=bg_colour,text_colour=text_colour,
                     fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
                     hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
-                    hns=hns,btc=btc,eth=eth, data=html)
+                    hns=hns,btc=btc,eth=eth, data=html,footer=footer)
         else:
-            return render_template(get_template_file(template),bg_colour=bg_colour,text_colour=text_colour,
+            return render_template_string(get_template(template),bg_colour=bg_colour,text_colour=text_colour,
                     fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
                     hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
-                    hns=hns,btc=btc,eth=eth, data=html)
+                    hns=hns,btc=btc,eth=eth, data=html,footer=footer)
 
     except Exception as e:
         return "<h1>Nothing here yet</h1>" + "<script>console.log('" + str(e).replace('\'','') + "');</script>"
-    
 
-
-def get_template_without_address(template):
+def get_template(template,hide_addresses=False):
     file = "templates/" +get_template_file(template)
     with open(file) as f:
         data = f.read()
@@ -106,13 +111,14 @@ def get_template_without_address(template):
     # Read template
     soup = BeautifulSoup(data, 'html.parser')
     # Remove addresses div
-    try:
-        addresses = soup.find(id="addresses")
-        addresses.decompose()
-    finally:
-        # Return template without addresses
-        return str(soup)
-        
+    if hide_addresses:
+        try:
+            addresses = soup.find(id="addresses")
+            addresses.decompose()
+        except:
+            pass    
+    
+    return str(soup)
 
 def calculate_contrast_ratio(color1, color2):
     def calculate_luminance(color):
@@ -156,11 +162,17 @@ def rgb_to_hex(rgb_color):
 
 
 def get_template_file(template):
-    if template == "Original":
-        return "city_old.html"
-    elif template == "No card around data":
-        return "city_no_card.html"
-    elif template == "No card around data (2)":
-        return "city_no_card_2.html"
+    template = template.lower()
+    templates = {
+        "standard": "city.html",
+        "original": "city_old.html",
+        "no card around data": "city_no_card.html",
+        "no card around data (2)": "city_no_card_2.html",
+        "blank": "city_blank.html"
+    }
+
+    if template in templates:
+        return templates[template]
+    
     
     return "city.html"
