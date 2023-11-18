@@ -3,6 +3,7 @@ import dotenv
 import db
 import random
 import json
+import varo
 
 
 IMAGE_LOCATION = os.getenv('IMAGE_LOCATION')
@@ -31,11 +32,15 @@ def save_avatar(file,owner):
     user_data = db.get_website_data_raw(owner)
     user_data['avatar'] = MAIN_DOMAIN + "/avatar/" + filename
     db.update_website_data_raw(owner,json.dumps(user_data))
+    varo.update_avatar(user_data['avatar'],owner)
     return filename
 
 def clear(owner):
     user_data = db.get_website_data_raw(owner)
     filename = user_data['avatar'].split('/')[-1]
-    os.remove(f"{IMAGE_LOCATION}/{filename}")
+
+    if filename != "":
+        os.remove(f"{IMAGE_LOCATION}/{filename}")
     user_data['avatar'] = ""
     db.update_website_data_raw(owner,json.dumps(user_data))
+    varo.update_avatar(user_data['avatar'],owner)

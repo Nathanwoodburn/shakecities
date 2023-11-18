@@ -16,6 +16,8 @@ services:
     image: git.woodburn.au/nathanwoodburn/shakecities:latest
     depends_on:
       - db
+    volumes:
+      - images:/data
     environment:
       DB_HOST: db
       DB_USER: main
@@ -24,6 +26,7 @@ services:
       CITY_DOMAIN: exampledomainnathan1
       REG_KEY: <your-varo-apikey>
       CITY_ALIAS: city.hnshosting.au # ICANN domain that points to the IP for the cities server
+      MAIN_DOMAIN: cities.hnshosting.au
       WORKERS: 2 # number of workers to run (should be 2 * number of cores)
 
   sites:
@@ -49,4 +52,5 @@ services:
       - db_data:/var/lib/mysql
 volumes:
   db_data:
+  images:
 ```

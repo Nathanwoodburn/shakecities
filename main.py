@@ -149,6 +149,11 @@ def edit():
         location = data['location']
     if 'avatar' in data:
         avatar = data['avatar']
+        if avatar != "":
+            avatar = "<img class='rounded-circle' width='100px' height='100px' src='"+avatar+"' style='margin-right: 25px;' />"
+        else:
+            avatar = "<p style='margin-right: 25px;'>No avatar set</p>"
+
     if 'bg_colour' in data:
         bg_colour = data['bg_colour']
     if 'fg_colour' in data:
@@ -180,21 +185,18 @@ def send_edit():
         return resp
     
     # Json data
-    data = {}
+    data = db.get_website_data_raw(user['domain'])
     data['data'] = request.form['data']
     data['HNS'] = request.form['hns']
     data['BTC'] = request.form['btc']
     data['ETH'] = request.form['eth']
     data['hnschat'] = request.form['hnschat']
     data['location'] = request.form['location']
-    data['avatar'] = request.form['avatar']
     data['bg_colour'] = request.form['bg_colour']
     data['fg_colour'] = request.form['fg_colour']
     data['text_colour'] = request.form['text_colour']
     data['email'] = request.form['email']
 
-
-    varo.update_avatar(data['avatar'],user['domain'])
     # Convert to json
     data = json.dumps(data)
     db.update_website_data_raw(user['domain'],data)
