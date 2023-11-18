@@ -171,6 +171,8 @@ def edit():
 
     if 'template' in data:
         selected_template = data['template']
+    else:
+        selected_template = templates[0]
 
 
     return render_template('edit.html',account=user['email'],account_link="account",account_link_name="Account",data=html,
