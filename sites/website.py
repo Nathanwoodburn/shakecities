@@ -11,6 +11,9 @@ FOOTER=""
 if os.path.exists("parts/footer.html"):
     with open("parts/footer.html") as f:
         FOOTER = f.read()
+elif os.path.exists("sites/parts/footer.html"):
+    with open("sites/parts/footer.html") as f:
+        FOOTER = f.read()
 
 def render(data,db_object):
     if data == False:
