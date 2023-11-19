@@ -7,6 +7,22 @@ Every domain comes enabled with HTTPS via DANE. We have support HIP02 aliases, s
 
 
 
+### Template testing
+
+Replace `new` with your template name
+
+```sh
+cd <Git-REPONAME>
+# Copy template
+cp templates/city_template.html templates/city_new.html
+# Edit template
+# Test site with template
+python3 -m pip install -r requirements.txt
+python3 template.py city_new
+```
+
+Visit http://127.0.0.1:5000/ to view the template
+
 
 ### Deployment
 ```

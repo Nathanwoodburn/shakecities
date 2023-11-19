@@ -16,7 +16,7 @@ def render(data,db_object):
     if data == False:
         return redirect("https://" + main_domain + '/claim?domain=' + request.host.split('.')[0])
     elif data == "":
-        return redirect("https://" + main_domain + '/empty_site')
+        return redirect("https://" + main_domain + '/empty_site?nodata')
     
     # Render as HTML
     html = ""
@@ -31,7 +31,7 @@ def render(data,db_object):
 
         html = str(soup)
     except Exception as e:
-        return redirect("https://" + main_domain + '/empty_site')
+        return redirect("https://" + main_domain + '/empty_site?error='+str(e))
     
     try:
         avatar = db_object['avatar']
@@ -104,7 +104,7 @@ def render(data,db_object):
                     hns=hns,btc=btc,eth=eth, data=html,footer=footer)
 
     except Exception as e:
-        return redirect("https://" + main_domain + '/empty_site')
+        return redirect("https://" + main_domain + '/empty_site?error='+str(e))
 
 def get_template(template,hide_addresses=False):
     file = "templates/" +get_template_file(template)
@@ -165,6 +165,10 @@ def rgb_to_hex(rgb_color):
 
 
 def get_template_file(template):
+    if template.endswith(".html"):
+        return template
+
+
     template = template.lower()
     templates = {
         "standard": "city.html",
