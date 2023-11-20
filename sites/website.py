@@ -73,6 +73,9 @@ def render(data,db_object):
         hns_address = hns
         btc_address = btc
         eth_address = eth
+        hns_invert = hns_address
+        btc_invert = btc_address
+        eth_invert = eth_address
         if hns != "":
             hns = "<img src='" + hns_icon + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns
             hns_invert = "<img src='" + hns_icon_invert + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns_address
