@@ -59,8 +59,6 @@ def render(data,db_object):
             hns_icon_invert = "assets/img/HNS.png"
             btc_icon_invert = "assets/img/BTC.png"
             eth_icon_invert = "assets/img/ETH.png"
-            location_icon = "assets/img/mapw.png"
-            email_icon = "assets/img/emailw.png"
         else:
             hns_icon = "assets/img/HNS.png"
             btc_icon = "assets/img/BTC.png"
@@ -68,8 +66,16 @@ def render(data,db_object):
             hns_icon_invert = "assets/img/HNSW.png"
             btc_icon_invert = "assets/img/BTCW.png"
             eth_icon_invert = "assets/img/ETHW.png"
+
+        if (rgb_to_hex(generate_foreground_color(fg_colour)) == "#000000"):
+            hns_chat_icon = "assets/img/HNS.png"
             location_icon = "assets/img/map.png"
             email_icon = "assets/img/email.png"
+        else:
+            hns_chat_icon = "assets/img/HNSW.png"
+            location_icon = "assets/img/mapw.png"
+            email_icon = "assets/img/emailw.png"
+
         hns_address = hns
         btc_address = btc
         eth_address = eth
@@ -92,7 +98,7 @@ def render(data,db_object):
             hide_addresses = True
         
         if hnschat != "":
-            hnschat = "<a href='https://hns.chat/#message:"+hnschat+"' target='_blank'><img src='"+hns_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat + "/</a>"
+            hnschat = "<a href='https://hns.chat/#message:"+hnschat+"' target='_blank'><img src='"+hns_chat_icon+"' width='20px' height='20px' style='margin-right: 5px;'>" + hnschat + "/</a>"
         if location != "":
             location = "<img src='"+location_icon+"' width='20px' height='30px' style='margin-right: 5px;'>" + location
         if email != "":
