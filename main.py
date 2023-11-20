@@ -40,7 +40,7 @@ templates = [
     'No card around data',
     'No card around data (2)',
     'Blank',
-    'Standard with donate footer'
+    'Standard with donate footer',
     'No card with donate footer'
     ]
 
