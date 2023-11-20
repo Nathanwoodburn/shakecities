@@ -21,7 +21,8 @@ python3 -m pip install -r requirements.txt
 python3 template.py city_new
 ```
 
-Visit http://127.0.0.1:5000/ to view the template
+Visit http://127.0.0.1:5000/ to view the template  
+Here is a list of placeholders you can use [PLACEHOLDERS.md](PLACEHOLDERS.md)
 
 
 ### Deployment

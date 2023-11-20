@@ -75,16 +75,14 @@ def render(data,db_object):
         eth_address = eth
         if hns != "":
             hns = "<img src='" + hns_icon + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns
-        if btc != "":
-            btc = "<img src='" + btc_icon + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc
-        if eth != "":
-            eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
-        if hns != "":
             hns_invert = "<img src='" + hns_icon_invert + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns_address
         if btc != "":
+            btc = "<img src='" + btc_icon + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc
             btc_invert = "<img src='" + btc_icon_invert + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc_address
         if eth != "":
+            eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
             eth_invert = "<img src='" + eth_icon_invert + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth_address
+            
 
         hide_addresses = False
         if hns == "" and btc == "" and eth == "":
