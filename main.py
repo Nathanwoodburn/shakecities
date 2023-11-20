@@ -351,7 +351,7 @@ def catch_all(path):
         account_link = "account"
         account_link_name = "Account"
         site = user['domain'] + "." + CITY_DOMAIN
-    elif path != "signup" and path != "login":
+    elif path != "signup" and path != "login" and path != "empty_site":
         return redirect('/')
     
     if path == "account":
