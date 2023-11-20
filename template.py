@@ -12,9 +12,9 @@ db_object = {
     'hnschat':"nathan.woodburn",
     'location': "Australia",
     'email': "test@email",
-    'HNS': "hs1...",
-    'BTC': "bc1...",
-    'ETH' : "0x...",
+    'HNS': "hs1qh7c98nexsrzwrmnh2avved6awe59jzpr3xx2xf",
+    'BTC': "bc1qhs94zzcw64qnwq4hvk056rwxwvgrkd7tq7d4xw",
+    'ETH' : "0x6cB4B39bEc23a921C9a20D061Bf17d4640B0d39e",
     'bg_colour': "#000000",
     'fg_colour': "#ffffff",
     'text_colour': "#152D45",
@@ -46,6 +46,12 @@ def send_assets(path):
     return send_from_directory('templates/assets', path)
 
 
+@app.route('/.well-known/wallets/<path:path>')
+def send_wallets(path):
+    if path in db_object:
+        return db_object[path]
+    else:
+        return "Not found"
 
 if __name__ == "__main__":
     # Get second arg

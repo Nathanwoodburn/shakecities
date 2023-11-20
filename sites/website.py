@@ -56,21 +56,35 @@ def render(data,db_object):
             hns_icon = "assets/img/HNSW.png"
             btc_icon = "assets/img/BTCW.png"
             eth_icon = "assets/img/ETHW.png"
+            hns_icon_invert = "assets/img/HNS.png"
+            btc_icon_invert = "assets/img/BTC.png"
+            eth_icon_invert = "assets/img/ETH.png"
             location_icon = "assets/img/mapw.png"
             email_icon = "assets/img/emailw.png"
         else:
             hns_icon = "assets/img/HNS.png"
             btc_icon = "assets/img/BTC.png"
             eth_icon = "assets/img/ETH.png"
+            hns_icon_invert = "assets/img/HNSW.png"
+            btc_icon_invert = "assets/img/BTCW.png"
+            eth_icon_invert = "assets/img/ETHW.png"
             location_icon = "assets/img/map.png"
             email_icon = "assets/img/email.png"
-
+        hns_address = hns
+        btc_address = btc
+        eth_address = eth
         if hns != "":
             hns = "<img src='" + hns_icon + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns
         if btc != "":
             btc = "<img src='" + btc_icon + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc
         if eth != "":
             eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
+        if hns != "":
+            hns_invert = "<img src='" + hns_icon_invert + "' width='20px' height='20px' style='margin-right: 5px;'>" + hns_address
+        if btc != "":
+            btc_invert = "<img src='" + btc_icon_invert + "' width='20px' height='25px' style='margin-right: 5px;'>" + btc_address
+        if eth != "":
+            eth_invert = "<img src='" + eth_icon_invert + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth_address
 
         hide_addresses = False
         if hns == "" and btc == "" and eth == "":
@@ -95,17 +109,14 @@ def render(data,db_object):
                 template = db_object['template']
 
         footer = render_template_string(FOOTER,main_domain=main_domain,fg_colour=fg_colour,hns_icon=hns_icon)
-        if hide_addresses:
-            return render_template_string(get_template(template,True),bg_colour=bg_colour,text_colour=text_colour,
-                    fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
-                    hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
-                    hns=hns,btc=btc,eth=eth, data=html,footer=footer)
-        else:
-            return render_template_string(get_template(template),bg_colour=bg_colour,text_colour=text_colour,
-                    fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
-                    hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
-                    hns=hns,btc=btc,eth=eth, data=html,footer=footer)
-
+        return render_template_string(get_template(template,hide_addresses),bg_colour=bg_colour,text_colour=text_colour,
+                fg_colour=fg_colour, avatar=avatar,main_domain=main_domain,
+                hnschat=hnschat,email=email,location=location, hns_icon=hns_icon,
+                hns=hns,btc=btc,eth=eth,hns_invert=hns_invert,btc_invert=btc_invert,
+                eth_invert=eth_invert,hns_address=hns_address,btc_address=btc_address,eth_address=eth_address,
+                hns_icon_invert=hns_icon_invert,btc_icon=btc_icon,btc_icon_invert=btc_icon_invert,
+                eth_icon=eth_icon,eth_icon_invert=eth_icon_invert,
+                data=html,footer=footer)
     except Exception as e:
         return redirect("https://" + main_domain + '/empty_site?error='+str(e))
 
