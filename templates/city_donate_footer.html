@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en" style="width: 100vw;height: 99vh;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ShakeCities</title>
+    <meta name="twitter:description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <meta name="description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://shakecities.com/assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp">
+    <meta property="og:title" content="ShakeCities">
+    <meta name="twitter:title" content="ShakeCities">
+    <meta name="twitter:image" content="https://shakecities.com/assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp">
+    <meta property="og:description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNSW.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNSW.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+</head>
+
+<body style="height: 99vh;width: 100vw;color: #1fffff;background: #000000;overflow-x: hidden;">
+    <div class="text-center" style="margin: 10px;">
+        <div>{{avatar|safe}}</div>
+        <div style="color: #f1ffff;">
+            <div>
+                <p style="font-size: 24px;">{{hnschat|safe}}</p>
+            </div>
+            <div>
+                <p style="font-size: 24px;">{{email|safe}}</p>
+            </div>
+            <div>
+                <p style="font-size: 24px;">{{location|safe}}</p>
+            </div>
+        </div>
+    </div>
+    <div style="background: #f1ffff;border-radius: 10px;padding: 25px;padding-top: 2%;padding-left: 2%;padding-right: 2%;padding-bottom: 2%;margin: 22px;">
+        <p style="font-size: 24px;">{{data|safe}}</p>
+    </div>
+    <div id="addresses" style="position: absolute;bottom: 100px;width: 100%;text-align: center;">
+        <p style="font-size: 20px;margin-bottom: 0px;">
+            <a style="text-decoration: none;color: #f1ffff;" href="/.well-known/wallets/HNS" target="_blank">
+                <img src='{{hns_icon_invert}}' width='20px' height='20px' style='margin-right: 5px;'>
+            </a>
+            <a style="text-decoration: none;color: #f1ffff;" href="/.well-known/wallets/BTC" target="_blank">
+                <img src='{{btc_icon_invert}}' width='20px' height='25px' style='margin-right: 5px;'>
+            </a>
+            <a style="text-decoration: none;color: #f1ffff;" href="/.well-known/wallets/ETH" target="_blank">
+                <img src='{{eth_icon_invert}}' width='20px' height='30px' style='margin-right: 5px;'>
+            </a>
+        </p>
+    </div>
+    
+    
+    {{footer | safe}}
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+</body>
+
+</html>

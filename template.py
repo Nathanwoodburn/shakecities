@@ -16,8 +16,11 @@ db_object = {
     'BTC': "bc1qhs94zzcw64qnwq4hvk056rwxwvgrkd7tq7d4xw",
     'ETH' : "0x6cB4B39bEc23a921C9a20D061Bf17d4640B0d39e",
     'bg_colour': "#000000",
-    'fg_colour': "#ffffff",
-    'text_colour': "#152D45",
+    # 'fg_colour': "#ffffff",
+    # 'text_colour': "#152D45",
+    'text_colour': "#ffffff",
+    'fg_colour': "#8f00db",
+    
 }
 
 @app.route('/')

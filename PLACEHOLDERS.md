@@ -87,7 +87,7 @@ This is the main body
 ## Crypto Address Placeholders
 ### Icons
 These are the icons for the crypto addresses.  
-There are 2 versions of each icon. One with a contrast to the foreground colour and one without.
+There are 2 versions of each icon. One with a contrast to the background colour and one without.
 
 These return the path to the image of the icon (eg. `assets/img/HNS.png`)
 

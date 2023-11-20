@@ -52,7 +52,7 @@ def render(data,db_object):
         bg_colour = db_object['bg_colour']
         fg_colour = db_object['fg_colour']
         text_colour = db_object['text_colour']
-        if (rgb_to_hex(generate_foreground_color(text_colour)) == "#000000"):
+        if (rgb_to_hex(generate_foreground_color(bg_colour)) == "#000000"):
             hns_icon = "assets/img/HNSW.png"
             btc_icon = "assets/img/BTCW.png"
             eth_icon = "assets/img/ETHW.png"
@@ -82,7 +82,7 @@ def render(data,db_object):
         if eth != "":
             eth = "<img src='" + eth_icon + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth
             eth_invert = "<img src='" + eth_icon_invert + "' width='20px' height='30px' style='margin-right: 5px;'>" + eth_address
-            
+
 
         hide_addresses = False
         if hns == "" and btc == "" and eth == "":
@@ -187,7 +187,9 @@ def get_template_file(template):
         "original": "city_old.html",
         "no card around data": "city_no_card.html",
         "no card around data (2)": "city_no_card_2.html",
-        "blank": "city_blank.html"
+        "blank": "city_blank.html",
+        "standard with donate footer": "city_donate_footer.html",
+        "no card with donate footer": "city_no_card_donate_footer.html",
     }
 
     if template in templates:
