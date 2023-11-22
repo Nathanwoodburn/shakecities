@@ -417,7 +417,7 @@ def tribe(tribe):
     members_html = ""
     members = data['members']
     for member in members:
-        members_html += "<a href='https://" + member + "." + CITY_DOMAIN + "' target='_blank'>" + member + "." +CITY_DOMAIN+ "</a><br>"
+        members_html += "<a href='https://" + member + "." + CITY_DOMAIN + "' target='_blank'>" + member + "." +CITY_DOMAIN+ "/</a><br>"
 
     edit = ""
 
