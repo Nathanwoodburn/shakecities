@@ -68,7 +68,7 @@ def index():
     tribes = db.get_tribes()
     tribesHTML = ""
     for tribe in tribes:
-        tribesHTML += "<a href='/tribe/" + tribe + "'>" + tribe + "</a><br>"
+        tribesHTML += "<a href='/tribe/" + tribe + "'>" + tribe.capitalize() + "</a><br>"
 
 
     if 'token' in request.cookies:
@@ -337,7 +337,7 @@ def tribe_list():
     tribes = db.get_tribes()
     tribesHTML = ""
     for tribe in tribes:
-        tribesHTML += "<a href='/tribe/" + tribe + "'>" + tribe + "</a><br>"
+        tribesHTML += "<a href='/tribe/" + tribe + "'>" + tribe.capitalize() + "</a><br>"
     
     # Add create link if user is logged in
     if 'token' in request.cookies:
@@ -382,9 +382,11 @@ def create_tribe():
         return resp
     
     tribe = request.form['tribe'].strip().lower()
-    if not re.match("^[a-z0-9]*$", tribe):
-        return error('Sorry tribe can only contain lowercase letters and numbers')
-    
+    if not re.match("^[a-z0-9_]*$", tribe):
+        return error('Sorry tribe can only contain lowercase letters, numbers and underscores')
+    if tribe.startswith("_") or tribe.endswith("_"):
+        return error('Sorry tribe can\'t start or end with an underscore')
+
     if len(tribe) < 3:
         return error('Sorry tribe must be at least 3 characters long')
     if len(tribe) > 255:
@@ -398,7 +400,7 @@ def create_tribe():
 @app.route('/tribe/<tribe>')
 def tribe(tribe):
     tribe = tribe.lower()
-    if not re.match("^[a-z0-9]*$", tribe):
+    if not re.match("^[a-z0-9_]*$", tribe):
         return error('Sorry we couldn\'t find that tribe')
     
     data = db.get_tribe_data_raw(tribe)
@@ -435,7 +437,7 @@ def tribe(tribe):
 @app.route('/join_tribe/<tribe>')
 def join_tribe(tribe):
     tribe = tribe.lower()
-    if not re.match("^[a-z0-9]*$", tribe):
+    if not re.match("^[a-z0-9_]*$", tribe):
         return error('Sorry we couldn\'t find that tribe')
     
     data = db.get_tribe_data_raw(tribe)
