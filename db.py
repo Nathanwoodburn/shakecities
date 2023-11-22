@@ -351,3 +351,13 @@ def update_tribe_data_raw(tribe,data):
     connection.commit()
     cursor.close()
     connection.close()
+
+def delete_tribe(tribe):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        DELETE FROM tribes WHERE tribe = %s
+    """, (tribe,))
+    connection.commit()
+    cursor.close()
+    connection.close()

@@ -43,7 +43,7 @@
             <div class="col" style="background: var(--bs-body-color);margin-right: 10px;border-radius: 10px;margin-top: 10px;margin-left: 10px;">
                 <h1 style="margin: 10px;">Edit {{tribe}} tribe</h1>
                 <form method="post" style="margin-bottom: 20px;"><input class="form-control" type="text" style="margin-top: 20px;" name="tribe" placeholder="Tribe Name" value="{{tribe}}"><textarea class="form-control" style="margin-top: 20px;" rows="5" placeholder="Content" name="data">{{data}}</textarea>
-                    <p style="margin-top: 20px;">{{members|safe}}</p><input class="btn btn-primary" type="submit" style="margin-top: 20px;" value="Edit">
+                    <p style="margin-top: 20px;">{{members|safe}}</p><input class="btn btn-primary" type="submit" style="margin-top: 20px;" value="Edit"><a class="btn btn-primary" role="button" style="margin-top: 20px;margin-left: 50px;" href="/delete_tribe">Delete Tribe</a>
                 </form>
             </div>
         </div>

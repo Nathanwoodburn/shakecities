@@ -558,6 +558,28 @@ def remove_member():
         db.update_tribe_data_raw(tribe,data)
     return redirect('/edit_tribe')
 
+@app.route('/delete_tribe')
+def delete_tribe():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    tribeData = db.get_user_owned_tribe(user['domain'])
+    if len(tribeData) == 0:
+        return error('Sorry you don\'t own a tribe')
+    
+    tribe = tribeData[0][1]
+    db.delete_tribe(tribe)
+    return redirect('/tribe')
+
 @app.route('/<path:path>')
 def catch_all(path):
     account = "Login"
