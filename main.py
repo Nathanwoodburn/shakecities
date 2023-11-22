@@ -523,6 +523,20 @@ def edit_tribe():
     # Convert to json
     data = json.dumps(data)
     db.update_tribe_data_raw(tribe,data)
+
+    # Check if tribe name changed
+    if tribe != request.form['tribe']:
+        # Verify new tribe name
+        new_tribe = request.form['tribe'].strip().lower()
+        if not re.match("^[a-z0-9_]*$", new_tribe):
+            return error('Sorry tribe can only contain lowercase letters, numbers and underscores')
+        if new_tribe.startswith("_") or new_tribe.endswith("_"):
+            return error('Sorry tribe can\'t start or end with an underscore')
+
+        # Delete old tribe
+        db.rename_tribe(tribe,new_tribe)
+
+
     return redirect('/edit_tribe')
 
 @app.route('/remove_member')

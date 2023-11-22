@@ -361,3 +361,13 @@ def delete_tribe(tribe):
     connection.commit()
     cursor.close()
     connection.close()
+
+def rename_tribe(old,new):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        UPDATE tribes SET tribe = %s WHERE tribe = %s
+    """, (new,old))
+    connection.commit()
+    cursor.close()
+    connection.close()
