@@ -65,7 +65,10 @@ def index():
         for site in random_sites_names:
             random_sites += "<a href='https://" + site + "." + CITY_DOMAIN + "' target='_blank'>" + site + "." +CITY_DOMAIN+ "</a><br>"
         
-    
+    tribes = db.get_tribes()
+    tribesHTML = ""
+    for tribe in tribes:
+        tribesHTML += "<a href='/tribe/" + tribe + "'>" + tribe + "</a><br>"
 
 
     if 'token' in request.cookies:
@@ -77,8 +80,8 @@ def index():
             resp = make_response(redirect('/'))
             resp.set_cookie('token', '', expires=0)
             return resp
-        return render_template('index.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN,random_sites=random_sites)
-    return render_template('index.html',account="Login",account_link="login",account_link_name="Login",CITY_DOMAIN=CITY_DOMAIN,random_sites=random_sites)
+        return render_template('index.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN,random_sites=random_sites,tribes=tribesHTML)
+    return render_template('index.html',account="Login",account_link="login",account_link_name="Login",CITY_DOMAIN=CITY_DOMAIN,random_sites=random_sites,tribes=tribesHTML)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -329,6 +332,232 @@ def avatar_clear():
     return redirect('/edit')
 
 
+@app.route('/tribe')
+def tribe_list():
+    tribes = db.get_tribes()
+    tribesHTML = ""
+    for tribe in tribes:
+        tribesHTML += "<a href='/tribe/" + tribe + "'>" + tribe + "</a><br>"
+    
+    # Add create link if user is logged in
+    if 'token' in request.cookies:
+        token = request.cookies['token']
+        # Verify token
+        user = accounts.validate_token(token)
+        if user:
+            tribesHTML += "<br><br><a class='btn btn-primary' role='button' style='width: 100%;' href='/new_tribe'>Create a tribe</a>"
+            return render_template('tribe.html',account="Account",account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN,tribes=tribesHTML)
+        
+    return render_template('tribe.html',account="Login",account_link="login",account_link_name="Login",CITY_DOMAIN=CITY_DOMAIN,tribes=tribesHTML)
+
+@app.route('/new_tribe')
+def new_tribe():
+    if 'token' not in request.cookies:
+        return redirect('/login')
+
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    return render_template('new_tribe.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN)
+
+@app.route('/new_tribe', methods=['POST'])
+def create_tribe():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    tribe = request.form['tribe'].strip().lower()
+    if not re.match("^[a-z0-9]*$", tribe):
+        return error('Sorry tribe can only contain lowercase letters and numbers')
+    
+    if len(tribe) < 3:
+        return error('Sorry tribe must be at least 3 characters long')
+    if len(tribe) > 255:
+        return error('Sorry tribe must be less than 255 characters long')
+    
+    if db.create_tribe(tribe,user['domain']):
+        return redirect('/tribe/' + tribe)
+    else:
+        return error('Sorry you already have a tribe')
+
+@app.route('/tribe/<tribe>')
+def tribe(tribe):
+    tribe = tribe.lower()
+    if not re.match("^[a-z0-9]*$", tribe):
+        return error('Sorry we couldn\'t find that tribe')
+    
+    data = db.get_tribe_data_raw(tribe)
+    if data == None:
+        return error('Sorry we couldn\'t find that tribe')
+    
+    html = ""
+    if 'data' in data:
+        html = data['data'].encode('utf-8').decode('unicode-escape')
+        html = html.replace("\n","<br>")
+    
+    tribe = tribe.capitalize()
+
+    members_html = ""
+    members = data['members']
+    for member in members:
+        members_html += "<a href='https://" + member + "." + CITY_DOMAIN + "' target='_blank'>" + member + "." +CITY_DOMAIN+ "</a><br>"
+
+    edit = ""
+
+    # Add edit link if user is logged in
+    if 'token' in request.cookies:
+        token = request.cookies['token']
+        # Verify token
+        user = accounts.validate_token(token)
+        if user:
+            if db.check_tribe_owner(tribe,user['domain']):
+                edit = "<a class='btn btn-primary' role='button' style='width: 100%;' href='/edit_tribe'>Edit tribe</a>"
+            elif user['domain'] not in members:
+                edit = "<a class='btn btn-primary' role='button' style='width: 100%;' href='/join_tribe/" + tribe + "'>Join tribe</a>"
+    
+    return render_template('tribe_view.html',tribe=tribe,data=html,edit=edit,members=members_html)
+
+@app.route('/join_tribe/<tribe>')
+def join_tribe(tribe):
+    tribe = tribe.lower()
+    if not re.match("^[a-z0-9]*$", tribe):
+        return error('Sorry we couldn\'t find that tribe')
+    
+    data = db.get_tribe_data_raw(tribe)
+    if data == None:
+        return error('Sorry we couldn\'t find that tribe')
+    
+    # Verify token
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    members = data['members']
+    if user['domain'] in members:
+        return error('Sorry you are already a member of this tribe')
+    
+    members.append(user['domain'])
+    data['members'] = members
+    # Convert to json
+    data = json.dumps(data)
+    db.update_tribe_data_raw(tribe,data)
+    return redirect('/tribe/' + tribe)
+
+
+@app.route('/edit_tribe')
+def edit_tribe_view():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    tribeData = db.get_user_owned_tribe(user['domain'])
+    if len(tribeData) == 0:
+        return error('Sorry you don\'t own a tribe')
+    
+    tribe = tribeData[0][1]
+    data = tribeData[0][2]
+    data = json.loads(data)
+    html = data['data'].encode('utf-8').decode('unicode-escape')
+    members = data['members']
+    members_html = ""
+    for member in members:
+        members_html += "<a href='https://" + member + "." + CITY_DOMAIN + "' target='_blank'>" + member + "." +CITY_DOMAIN+ "</a> <a href='/remove_member?member=" + member + "'>(Remove)</a><br>"
+
+    return render_template('edit_tribe.html',account=user['email'],account_link="account",account_link_name="Account",CITY_DOMAIN=CITY_DOMAIN,tribe=tribe,data=html,members=members_html)
+
+@app.route('/edit_tribe', methods=['POST'])
+def edit_tribe():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    tribeData = db.get_user_owned_tribe(user['domain'])
+    if len(tribeData) == 0:
+        return error('Sorry you don\'t own a tribe')
+
+    tribe = tribeData[0][1]
+    data = tribeData[0][2]
+    data = json.loads(data)
+    data['data'] = request.form['data'].strip()
+    
+    # Convert to json
+    data = json.dumps(data)
+    db.update_tribe_data_raw(tribe,data)
+    return redirect('/edit_tribe')
+
+@app.route('/remove_member')
+def remove_member():
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        return error('Sorry we had an issue verifying your account')
+
+    member = request.args.get('member')
+    # Verify token
+    user = accounts.validate_token(token)
+    if not user:
+        # Remove cookie
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    tribeData = db.get_user_owned_tribe(user['domain'])
+    if len(tribeData) == 0:
+        return error('Sorry you don\'t own a tribe')
+    
+    # Verify member isn't owner
+    if member == user['domain']:
+        return error('Sorry you can\'t remove yourself from your own tribe')
+
+    tribe = tribeData[0][1]
+    data = tribeData[0][2]
+    data = json.loads(data)
+    members = data['members']
+    if member in members:
+        members.remove(member)
+        data['members'] = members
+        # Convert to json
+        data = json.dumps(data)
+        db.update_tribe_data_raw(tribe,data)
+    return redirect('/edit_tribe')
+
 @app.route('/<path:path>')
 def catch_all(path):
     account = "Login"
@@ -336,6 +565,9 @@ def catch_all(path):
     account_link_name = "Login"
     site = "Null"
     domain = ""
+    tribe_title = "Join a tribe"
+    tribe_link = "tribe"
+
     if 'domain' in request.args:
         domain = request.args.get('domain')
     if 'token' in request.cookies:
@@ -351,6 +583,12 @@ def catch_all(path):
         account_link = "account"
         account_link_name = "Account"
         site = user['domain'] + "." + CITY_DOMAIN
+        # Check if user owns tribe
+        tribeData = db.get_user_owned_tribe(user['domain'])
+        if len(tribeData) > 0:
+            tribe_title = "Edit your tribe"
+            tribe_link = "edit_tribe"
+
     elif path != "signup" and path != "login" and path != "empty_site":
         return redirect('/')
     
@@ -360,11 +598,17 @@ def catch_all(path):
 
     # If file exists, load it
     if os.path.isfile('templates/' + path):
-        return render_template(path,account=account,account_link=account_link,account_link_name=account_link_name,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
+        return render_template(path,account=account,account_link=account_link,
+                               account_link_name=account_link_name,site=site,
+                               CITY_DOMAIN=CITY_DOMAIN,domain=domain,
+                               tribe_title=tribe_title,tribe_link=tribe_link)
     
     # Try with .html
     if os.path.isfile('templates/' + path + '.html'):
-        return render_template(path + '.html',account=account,account_link=account_link,account_link_name=account_link_name,site=site,CITY_DOMAIN=CITY_DOMAIN,domain=domain)
+        return render_template(path + '.html',account=account,account_link=account_link,
+                               account_link_name=account_link_name,site=site,
+                               CITY_DOMAIN=CITY_DOMAIN,domain=domain,
+                               tribe_title=tribe_title,tribe_link=tribe_link)
     return redirect('/') # 404 catch all
 
 
@@ -382,4 +626,4 @@ def update_random_sites():
 
 if __name__ == '__main__':
     db.check_tables()
-    app.run(debug=False, port=5000, host='0.0.0.0')
+    app.run(debug=True, port=5000, host='0.0.0.0')

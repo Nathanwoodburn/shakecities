@@ -7,6 +7,8 @@ import os
 app = Flask(__name__)
 template = "city"
 data = "<h1>Test site</h1><p>This is a test site</p>"
+# data = "<div style=\"text-align:center;\"><h1>Nathan.Woodburn/</h1><h2>This is fully customizable!</h2><p>You can even add custom css rules like below.<br>Try hovering over this image</p><style>img.background:hover {filter: blur(5px)}</style><div class=\"profile-container\" style=\"height: 300px;margin-bottom: 2em;\"><img class=\"profile background\" src=\"https://nathan.woodburn.au/assets/img/profile.jpg\" style=\"border-radius: 50%;width: 300px;position: absolute;left: 50%;margin-left: -150px;aspect-ratio: 1;padding-top: calc(var(--s)/5);transform: scale(1);transition: .5s;\" alt=\"My Profile\"><img class=\"profile foreground\" src=\"https://nathan.woodburn.au/assets/img/pfront.webp\" alt=\"\" style=\"border-radius: 50%;pointer-events: none;width: 300px;position: absolute;left: 50%;margin-left: -150px;aspect-ratio: 1;padding-top: calc(var(--s)/5);transform: scale(1);transition: .5s;\"></div>"
+
 db_object = {
     'avatar': "https://woodburn.au/favicon.png",
     'hnschat':"nathan.woodburn",

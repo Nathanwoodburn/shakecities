@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html style="width: 100vw;height: 99vh;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ShakeCities</title>
+    <meta name="twitter:description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <meta name="description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://shakecities.com/assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp">
+    <meta property="og:title" content="ShakeCities">
+    <meta name="twitter:title" content="ShakeCities">
+    <meta name="twitter:image" content="https://shakecities.com/assets/img/alexander-slattery-LI748t0BK8w-unsplash.webp">
+    <meta property="og:description" content="Unlock web ownership's future with ShakeCities! Create your free, secure Handshake domain site. Integrate crypto payments, explore HNSChat, and join us in shaping the decentralized web!">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNSW.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNSW.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNS.png">
+    <link rel="icon" type="image/png" sizes="670x700" href="/assets/img/HNS.png">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.min.css">
+</head>
+
+
+<body style="height: 99vh;width: 100vw;color: #ffffff;background: #000000;overflow-x: hidden;">
+    <h1 style="margin: auto;text-align: center;font-size: 5em;">{{tribe}}</h1>
+    <div style="padding: 2%;margin: 22px;text-align: center;">
+        <p style="font-size: 24px;">
+            {{data|safe}} <!-- This needs the safe filter to allow HTML to be rendered -->
+        </p>
+    </div>
+    <div style="padding: 2%;margin: 22px;text-align: center;">
+        <h2>Tribe members</h2>
+        <p style="font-size: 24px;">
+            {{members|safe}} <!-- This needs the safe filter to allow HTML to be rendered -->
+        </p>
+    </div>
+    
+
+    <!-- Edit footer -->
+    <div style="height: 100px;"></div>
+        <div style="position: fixed;bottom: 10px;right:25px;">
+                <p style="color:#ffffff;">{{edit|safe}}</p>        
+        </div>        
+    </div>
+
+    <!-- Footer to display the powered by ShakeCities. -->
+    <div style="height: 100px;"></div>
+        <div style="position: fixed;bottom: 10px;left:25px;">
+            <div style="display: inline-block; background: #ffffff;border-radius: 50%;padding: 10px;">
+                <img src="/assets/img/HNS.png" width="50px" height="50px">
+        </div>
+        <p style="margin-left: 25px; display:inline; color:#ffffff;">Powered by <a style="color: inherit;" href="https://shakecities.com" target="_blank">ShakeCities</a></p>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+</body>
+
+</html>
