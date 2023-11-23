@@ -23,6 +23,7 @@
     <link rel="icon" type="image/png" sizes="670x700" href="assets/img/HNS.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
 </head>
 
 <body style="background: #000000;color: #ffffff;width: 95%;margin: auto;">
@@ -50,13 +51,13 @@
             <div class="d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-bottom: 10px;margin-top: 10px;"><label class="form-label" style="display: inline-block;margin-right: 15px;">Foreground colour&nbsp;</label><input class="form-control form-control-color" type="color" style="display: inline-block;border-radius: 50%;width: 50px;height: 50px;" name="fg_colour" value="{{fg_colour}}"></div>
             <div class="d-xl-flex justify-content-xl-center align-items-xl-center" style="margin-bottom: 10px;margin-top: 10px;"><label class="form-label" style="display: inline-block;margin-right: 15px;">Text colour&nbsp;</label><input class="form-control form-control-color" type="color" style="display: inline-block;border-radius: 50%;width: 50px;height: 50px;" name="text_colour" value="{{text_colour}}"></div><textarea class="form-control form-control-lg" rows="15" name="data" placeholder="HTML Content">{{data}}</textarea>
             <div class="text-center">
-                <div><input class="form-control" type="text" style="margin-top: 10px;display: inline-block;width: 500px;" placeholder="HNS Address" name="hns" value="{{hns}}" required="" pattern="hs1[A-Za-z0-9]+"><div class="form-check form-switch form-check-inline" style="display: inline-block;margin-left: 10px;">
+                <div><input class="form-control" type="text" style="margin-top: 10px;display: inline-block;width: 500px;" placeholder="HNS Address" name="hns" value="{{hns}}" pattern="hs1[A-Za-z0-9]+"><div class="form-check form-switch form-check-inline" style="display: inline-block;margin-left: 10px;">
     <input id="formCheck-1" class="form-check-input" type="checkbox" {% if hip2_display %}checked{% endif %} name="hip2_display" />
     <label class="form-check-label" for="formCheck-1">Show as @{{domain}}.{{CITY_DOMAIN}}</label>
 </div>
 </div>
                 <div><input class="form-control" type="text" style="margin-top: 10px;width: 500px;display: inline-block;" name="btc" placeholder="BTC Address" value="{{btc}}"></div>
-                <div><input class="form-control" type="text" style="margin-top: 10px;width: 500px;display: inline-block;" placeholder="ETH Address" name="eth" value="{{eth}}" required="" pattern="0x[A-Za-z0-9]+"></div>
+                <div><input class="form-control" type="text" style="margin-top: 10px;width: 500px;display: inline-block;" placeholder="ETH Address" name="eth" value="{{eth}}" pattern="0x[A-Za-z0-9]+"></div>
             </div>
             <div style="margin-top: 10px;display: inline-block;"><label class="form-label" style="margin-right: 25px;">Template</label><select class="form-select" id="template" name="template" style="width:auto;display:inline-block;">
             {% for template in templates %}
