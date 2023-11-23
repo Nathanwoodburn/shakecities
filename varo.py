@@ -10,7 +10,7 @@ city_domain = os.getenv('CITY_DOMAIN')
 if city_domain == "localhost":
     city_domain = "exampledomainnathan1"
 
-server_alias = os.getenv('CITY_ALIAS')
+server_ip = os.getenv('CITY_IP')
 
 def update_auth(auth,domain):
     verify_ALIAS(domain)
@@ -210,9 +210,9 @@ def verify_ALIAS(domain):
     data = {
         "action": "addRecord",
         "zone": zone,
-        "type": "ALIAS",
+        "type": "A",
         "name": domain,
-        "content": server_alias,
+        "content": server_ip,
         }
     r = requests.post(url, headers=headers, json=data)
     data = {
