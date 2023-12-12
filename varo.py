@@ -271,15 +271,71 @@ def copy_to_alts(domain):
         print(alt_zone)
         if alt_zone == "":
             continue
+        # Delete all records from domain.alt
+        data = {
+        "action": "getRecords",
+        "zone": alt_zone,
+        "name": domain+"."+alt_domain,
+        "type": "",
+        "content": ""
+        }
+        r = requests.post(url, headers=headers, json=data)
+        r = r.json()
+        if 'data' not in r:
+            continue
+        for record in r['data']:
+            data = {
+            "action": "deleteRecord",
+            "zone": alt_zone,
+            "record": record['uuid']
+            }
+            r = requests.post(url, headers=headers, json=data)
+            print(r.text)
+
         # Add each record to each alt
         for record in records:
             data = {
                 "action": "addRecord",
                 "zone": alt_zone,
                 "type": record['type'],
-                "name": record['name'].replace(domain,alt_domain),
+                "name": domain+"."+alt_domain,
                 "content": record['content'],
             }
             print(data)
+            r = requests.post(url, headers=headers, json=data)
+            print(r.text)
+        # Add TLSA record if it doesn't exist
+        data = {
+            "action": "getRecords",
+            "zone": alt_zone,
+            "name": "_443._tcp."+domain+"."+alt_domain,
+            "type": "TLSA",
+            "content": ""
+        }
+        r = requests.post(url, headers=headers, json=data)
+        r = r.json()
+        if 'data' not in r:
+            # Get alt TLSA from _443._tcp.alt_domain
+            data = {
+                "action": "getRecords",
+                "zone": alt_zone,
+                "name": "_443._tcp."+alt_domain,
+                "type": "TLSA",
+                "content": ""
+            }
+            r = requests.post(url, headers=headers, json=data)
+            r = r.json()
+            if 'data' not in r:
+                continue
+            for record in r['data']:
+                ALT_TLSA = record['content']
+
+            data = {
+                "action": "addRecord",
+                "zone": alt_zone,
+                "type": "TLSA",
+                "name": "_443._tcp."+domain+"."+alt_domain,
+                "content": ALT_TLSA,
+            }
             r = requests.post(url, headers=headers, json=data)
             print(r.text)
