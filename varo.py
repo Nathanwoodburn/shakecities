@@ -10,6 +10,13 @@ city_domain = os.getenv('CITY_DOMAIN')
 if city_domain == "localhost":
     city_domain = "exampledomainnathan1"
 
+alt_domains = os.getenv('ALT_DOMAINS')
+
+if alt_domains == None:
+    alt_domains = []
+else:
+    alt_domains = alt_domains.split(",")
+
 server_ip = os.getenv('CITY_IP')
 
 def update_auth(auth,domain):
@@ -46,6 +53,8 @@ def update_auth(auth,domain):
         'Content-Type': 'application/json'
     }
     r = requests.put(url, headers=headers, json=data)
+
+    copy_to_alts(domain)
     return r.text
 
 
@@ -184,6 +193,7 @@ def update_avatar(avatar,domain):
         "record": record_id
         }
     r = requests.post(url, headers=headers, json=data)
+    copy_to_alts(domain)
     return r.text
     
 def verify_ALIAS(domain):
@@ -223,4 +233,53 @@ def verify_ALIAS(domain):
         "content": TLSA,
         }
     r = requests.post(url, headers=headers, json=data)
+    copy_to_alts(domain)
     return r.text
+
+def copy_to_alts(domain):
+    # Get DNS from domain and copy to each alt
+    data = {
+    "action": "getRecords",
+    "zone": zone,
+    "name": domain+"."+city_domain,
+    "type": "",
+    "content": ""
+    }
+    url = "https://reg.woodburn.au/api"
+    headers = {
+        'Authorization': 'Bearer '+REG_KEY,
+        'Content-Type': 'application/json'
+    }
+    r = requests.post(url, headers=headers, json=data)
+    r = r.json()
+    if 'data' not in r:
+        return
+    
+    records = r['data']
+    
+    for alt_domain in alt_domains:
+        # Get the zone for the alt
+        alt_zone = ""
+        data = {
+        "action": "getZones"
+        }
+        r = requests.post(url, headers=headers, json=data)
+        r = r.json()
+        for tmpzone in r['data']:
+            if tmpzone['name'] == alt_domain:
+                alt_zone = tmpzone['id']
+        print(alt_zone)
+        if alt_zone == "":
+            continue
+        # Add each record to each alt
+        for record in records:
+            data = {
+                "action": "addRecord",
+                "zone": alt_zone,
+                "type": record['type'],
+                "name": record['name'].replace(domain,alt_domain),
+                "content": record['content'],
+            }
+            print(data)
+            r = requests.post(url, headers=headers, json=data)
+            print(r.text)
