@@ -602,6 +602,7 @@ def catch_all(path):
     account_link = "login"
     account_link_name = "Login"
     site = "Null"
+    sld = ""
     domain = ""
     tribe_title = "Join a tribe"
     tribe_link = "tribe"
@@ -621,6 +622,7 @@ def catch_all(path):
         account_link = "account"
         account_link_name = "Account"
         site = user['domain'] + "." + CITY_DOMAIN
+        sld = user['domain']
         # Check if user owns tribe
         tribeData = db.get_user_owned_tribe(user['domain'])
         if len(tribeData) > 0:
@@ -638,14 +640,14 @@ def catch_all(path):
     if os.path.isfile('templates/' + path):
         return render_template(path,account=account,account_link=account_link,
                                account_link_name=account_link_name,site=site,
-                               CITY_DOMAIN=CITY_DOMAIN,domain=domain,
+                               CITY_DOMAIN=CITY_DOMAIN,domain=domain,sld=sld,
                                tribe_title=tribe_title,tribe_link=tribe_link)
     
     # Try with .html
     if os.path.isfile('templates/' + path + '.html'):
         return render_template(path + '.html',account=account,account_link=account_link,
                                account_link_name=account_link_name,site=site,
-                               CITY_DOMAIN=CITY_DOMAIN,domain=domain,
+                               CITY_DOMAIN=CITY_DOMAIN,domain=domain,sld=sld,
                                tribe_title=tribe_title,tribe_link=tribe_link)
     return redirect('/') # 404 catch all
 
