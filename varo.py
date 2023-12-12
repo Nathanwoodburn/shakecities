@@ -204,7 +204,7 @@ def verify_ALIAS(domain):
     "action": "getRecords",
     "zone": zone,
     "name": domain+"."+city_domain,
-    "type": "ALIAS",
+    "type": "A",
     "content": ""
     }
     url = "https://reg.woodburn.au/api"
@@ -281,16 +281,15 @@ def copy_to_alts(domain):
         }
         r = requests.post(url, headers=headers, json=data)
         r = r.json()
-        if 'data' not in r:
-            continue
-        for record in r['data']:
-            data = {
-            "action": "deleteRecord",
-            "zone": alt_zone,
-            "record": record['uuid']
-            }
-            r = requests.post(url, headers=headers, json=data)
-            print(r.text)
+        if 'data' in r:
+            for record in r['data']:
+                data = {
+                "action": "deleteRecord",
+                "zone": alt_zone,
+                "record": record['uuid']
+                }
+                r = requests.post(url, headers=headers, json=data)
+                print(r.text)
 
         # Add each record to each alt
         for record in records:
