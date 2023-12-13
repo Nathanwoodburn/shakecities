@@ -140,8 +140,29 @@ def get_template(template,hide_addresses=False):
             addresses = soup.find(id="addresses")
             addresses.decompose()
         except:
-            pass    
+            pass
     
+    # If <!-- Matomo --> comment doesn't exist, add tracking to end of head
+    if 'Matomo' not in str(soup):
+        head = soup.find("head")
+        head.append(BeautifulSoup("""
+        <!-- Matomo -->
+        <script>
+            var _paq = window._paq = window._paq || [];
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+                var u="https://analytics.woodburn.au/";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '7']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+            })();
+        </script>
+        <!-- End Matomo Code -->
+        """, 'html.parser'))
+
     return str(soup)
 
 def calculate_contrast_ratio(color1, color2):
