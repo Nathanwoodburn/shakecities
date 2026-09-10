@@ -75,9 +75,9 @@
             <!-- <textarea class="form-control form-control-lg" rows="15" name="data" placeholder="HTML Content">{{data}}</textarea> -->
 
             <!-- Visual Editor Container -->
-            <div id="editor" style="height: 300px;">{{ data | safe }}</div>
+            <div id="editor" style="height: 300px; background: #ffffff; color: #000000;">{{ data | safe }}</div>
             <!-- Hidden input that submits the HTML to Flask -->
-            <input type="hidden" id="html_content" name="content">
+            <input type="hidden" id="html_content" name="data">
             
             <script>
               var quill = new Quill('#editor', {
@@ -91,9 +91,10 @@
                 formats: ['bold', 'italic', 'image']
               });
 
-              // Intercept form submit to copy Quill HTML into the hidden input
-              document.querySelector('form').onsubmit = function() {
-                document.querySelector('#html_content').value = quill.root.innerHTML;
+              // Attach submit listener specifically to the form containing the hidden input
+              var hiddenInput = document.querySelector('#html_content');
+              hiddenInput.closest('form').onsubmit = function() {
+                hiddenInput.value = quill.root.innerHTML;
               };
             </script>
 
