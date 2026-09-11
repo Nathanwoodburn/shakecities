@@ -169,9 +169,9 @@ def edit():
     if 'avatar' in data:
         avatar = data['avatar']
         if avatar != "":
-            avatar = "<img class='rounded-circle' width='100px' height='100px' src='"+avatar+"' style='margin-right: 25px;' />"
+            avatar = "<img class='rounded-circle' width='100px' height='100px' src='"+avatar+"' />"
         else:
-            avatar = "<p style='margin-right: 25px;'>No avatar set</p>"
+            avatar = "<p class='text-muted'>No avatar set</p>"
 
     if 'bg_colour' in data:
         bg_colour = data['bg_colour']

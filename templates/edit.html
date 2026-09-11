@@ -108,8 +108,16 @@
         <h1 style="text-align: center;margin-bottom: 30px;">Edit your page</h1>
     </section>
     <section style="width: 80%;margin: auto;">
-        <form action="/upload" method="post" enctype="multipart/form-data"><label class="form-label" style="margin-right: 20px;">Avatar</label>
-            <div style="display: inline-block;">{{avatar|safe}}</div><input class="form-control" type="file" style="display: inline-block;width: 300px;margin-right: 25px;" name="file" accept="image/*" required=""><input class="btn btn-primary" type="submit" style="margin-right: 20px;" value="Upload"><a class="btn btn-primary" role="button" href="/avatar/clear">Clear</a>
+        <form action="/upload" method="post" enctype="multipart/form-data" class="text-center" style="margin-bottom: 30px;">
+            <div style="margin-bottom: 15px;">
+                {{avatar|safe}}
+            </div>
+            <div class="d-flex justify-content-center align-items-center flex-wrap gap-2">
+                <label class="form-label mb-0" style="font-weight: bold; margin-right: 5px;">Avatar</label>
+                <input class="form-control" type="file" style="width: auto; max-width: 320px; display: inline-block;" name="file" accept="image/*" required="">
+                <input class="btn btn-primary" type="submit" value="Upload">
+                <a class="btn btn-primary" role="button" href="/avatar/clear">Clear</a>
+            </div>
         </form>
         <form class="text-center" method="post">
             <div style="max-width: 900px; margin: auto;">
@@ -136,8 +144,12 @@
                 </div>
 
                 <!-- Raw HTML Code Editor -->
-                <div id="code-editor-container" style="display: none;">
-                    <textarea id="raw_html_code" class="form-control" rows="15" style="background: #1e1e1e; color: #f8f8f2; font-family: monospace; font-size: 14px; border: 1px solid #555; border-radius: 6px;" placeholder="Write raw HTML content here...">{{ data }}</textarea>
+                <div id="code-editor-container" style="display: none; width: 100%;">
+                    <div style="background: #2d2d2d; color: #ccc; font-size: 12px; padding: 6px 12px; border-top-left-radius: 6px; border-top-right-radius: 6px; border: 1px solid #555; border-bottom: none; display: flex; justify-content: space-between; align-items: center;">
+                        <span>HTML Source Code</span>
+                        <span style="font-size: 11px; opacity: 0.8;">You can write raw HTML, embed widgets, or paste markup</span>
+                    </div>
+                    <textarea id="raw_html_code" class="form-control" rows="15" style="background: #1e1e1e; color: #f8f8f2; font-family: SFMono-Regular, Consolas, Menlo, Monaco, 'Courier New', monospace; font-size: 14px; border: 1px solid #555; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; width: 100% !important; min-height: 320px; tab-size: 2;" placeholder="Write raw HTML content here...">{{ data }}</textarea>
                 </div>
 
                 <!-- Hidden input that submits the HTML to Flask -->
@@ -148,15 +160,22 @@
               var quill = new Quill('#editor', {
                 theme: 'snow',
                 modules: {
-                  toolbar: [
-                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    [{ 'align': [] }],
-                    ['link', 'image', 'blockquote', 'code-block'],
-                    ['clean']
-                  ]
+                  toolbar: {
+                    container: [
+                      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                      ['bold', 'italic', 'underline', 'strike'],
+                      [{ 'color': [] }, { 'background': [] }],
+                      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                      [{ 'align': [] }],
+                      ['link', 'image', 'blockquote', 'code-block'],
+                      ['clean']
+                    ],
+                    handlers: {
+                      'code-block': function() {
+                        toggleMode();
+                      }
+                    }
+                  }
                 }
               });
 
@@ -167,33 +186,66 @@
               var codeContainer = document.getElementById('code-editor-container');
               var rawCode = document.getElementById('raw_html_code');
               var hiddenInput = document.getElementById('html_content');
+              var codeBlockBtn = document.querySelector('.ql-code-block');
+
+              if (codeBlockBtn) {
+                codeBlockBtn.setAttribute('title', 'Toggle HTML Code View');
+              }
+
+              var quillModified = false;
+              quill.on('text-change', function() {
+                quillModified = true;
+              });
+
+              function setMode(mode) {
+                if (mode === currentMode) return;
+                currentMode = mode;
+
+                if (currentMode === 'code') {
+                  btnCode.classList.add('btn-primary', 'active');
+                  btnCode.classList.remove('btn-outline-light');
+                  btnVisual.classList.remove('btn-primary', 'active');
+                  btnVisual.classList.add('btn-outline-light');
+                  if (codeBlockBtn) codeBlockBtn.classList.add('ql-active');
+
+                  if (quillModified) {
+                    var html = quill.root.innerHTML;
+                    if (html === '<p><br></p>') {
+                      html = '';
+                    }
+                    rawCode.value = html;
+                  } else if (!rawCode.value && quill.root.innerHTML !== '<p><br></p>') {
+                    rawCode.value = quill.root.innerHTML;
+                  }
+
+                  visualContainer.style.display = 'none';
+                  codeContainer.style.display = 'block';
+                  rawCode.focus();
+                } else {
+                  btnVisual.classList.add('btn-primary', 'active');
+                  btnVisual.classList.remove('btn-outline-light');
+                  btnCode.classList.remove('btn-primary', 'active');
+                  btnCode.classList.add('btn-outline-light');
+                  if (codeBlockBtn) codeBlockBtn.classList.remove('ql-active');
+
+                  quill.root.innerHTML = rawCode.value;
+                  quillModified = false;
+
+                  codeContainer.style.display = 'none';
+                  visualContainer.style.display = 'block';
+                }
+              }
+
+              function toggleMode() {
+                setMode(currentMode === 'visual' ? 'code' : 'visual');
+              }
 
               btnVisual.addEventListener('click', function() {
-                if (currentMode === 'visual') return;
-                currentMode = 'visual';
-                btnVisual.classList.add('btn-primary', 'active');
-                btnVisual.classList.remove('btn-outline-light');
-                btnCode.classList.remove('btn-primary', 'active');
-                btnCode.classList.add('btn-outline-light');
-
-                // Sync from raw code to quill
-                quill.root.innerHTML = rawCode.value;
-                codeContainer.style.display = 'none';
-                visualContainer.style.display = 'block';
+                setMode('visual');
               });
 
               btnCode.addEventListener('click', function() {
-                if (currentMode === 'code') return;
-                currentMode = 'code';
-                btnCode.classList.add('btn-primary', 'active');
-                btnCode.classList.remove('btn-outline-light');
-                btnVisual.classList.remove('btn-primary', 'active');
-                btnVisual.classList.add('btn-outline-light');
-
-                // Sync from quill to raw code
-                rawCode.value = quill.root.innerHTML;
-                visualContainer.style.display = 'none';
-                codeContainer.style.display = 'block';
+                setMode('code');
               });
 
               // Attach submit listener specifically to the form containing the hidden input
@@ -203,7 +255,11 @@
                   if (currentMode === 'code') {
                     hiddenInput.value = rawCode.value;
                   } else {
-                    hiddenInput.value = quill.root.innerHTML;
+                    var html = quill.root.innerHTML;
+                    if (html === '<p><br></p>') {
+                      html = '';
+                    }
+                    hiddenInput.value = html;
                   }
                 });
               }
