@@ -133,18 +133,18 @@
                 <div class="editor-mode-toggle">
                     <label class="form-label mb-0" style="font-weight: bold; font-size: 1.1rem; color: #ffffff;">Website Content</label>
                     <div class="btn-group btn-group-sm" role="group" aria-label="Editor Mode">
-                        <button type="button" class="btn btn-primary active" id="btn-visual-mode">Visual Editor</button>
-                        <button type="button" class="btn btn-outline-light" id="btn-code-mode">HTML Code</button>
+                        <button type="button" class="btn btn-outline-light" id="btn-visual-mode">Visual Editor</button>
+                        <button type="button" class="btn btn-primary active" id="btn-code-mode">HTML Code</button>
                     </div>
                 </div>
 
                 <!-- Visual Quill Editor -->
-                <div id="visual-editor-container">
+                <div id="visual-editor-container" style="display: none;">
                     <div id="editor">{{ data | safe }}</div>
                 </div>
 
                 <!-- Raw HTML Code Editor -->
-                <div id="code-editor-container" style="display: none; width: 100%;">
+                <div id="code-editor-container" style="display: block; width: 100%;">
                     <div style="background: #2d2d2d; color: #ccc; font-size: 12px; padding: 6px 12px; border-top-left-radius: 6px; border-top-right-radius: 6px; border: 1px solid #555; border-bottom: none; display: flex; justify-content: space-between; align-items: center;">
                         <span>HTML Source Code</span>
                         <span style="font-size: 11px; opacity: 0.8;">You can write raw HTML, embed widgets, or paste markup</span>
@@ -179,7 +179,7 @@
                 }
               });
 
-              var currentMode = 'visual';
+              var currentMode = 'code';
               var btnVisual = document.getElementById('btn-visual-mode');
               var btnCode = document.getElementById('btn-code-mode');
               var visualContainer = document.getElementById('visual-editor-container');
@@ -190,6 +190,7 @@
 
               if (codeBlockBtn) {
                 codeBlockBtn.setAttribute('title', 'Toggle HTML Code View');
+                codeBlockBtn.classList.add('ql-active');
               }
 
               function formatHtml(html) {
