@@ -8,9 +8,14 @@ import time
 import db
 import website
 
-
 app = Flask(__name__)
 dotenv.load_dotenv()
+
+def is_valid_site(domain):
+    return len(domain.split('.')) >= 2
+
+def get_host(domain):
+    return domain.split('.')[0]
 
 main_domain = "cities.hnshosting.au"
 if os.getenv('MAIN_DOMAIN') != None:
@@ -24,9 +29,9 @@ def assets(path):
 @app.route('/')
 def index():
     host = request.host
-    if len(host.split('.')) != 2:
+    if not is_valid_site(host):
         return redirect('https://'+main_domain)
-    host = host.split('.')[0]
+    host = get_host(host)
     
     # Get website data
     data = db.get_website_data(host)
