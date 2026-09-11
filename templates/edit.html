@@ -192,10 +192,20 @@
                 codeBlockBtn.setAttribute('title', 'Toggle HTML Code View');
               }
 
-              var quillModified = false;
-              quill.on('text-change', function() {
-                quillModified = true;
-              });
+              function formatHtml(html) {
+                if (!html) return '';
+                return html
+                  .replace(/(<\/(?:p|div|h[1-6]|ul|ol|li|blockquote|pre|table|tr|section|header|footer)>)/gi, '$1\n')
+                  .trim();
+              }
+
+              function getVisualHtml() {
+                var qHtml = quill.root.innerHTML;
+                if ((!qHtml || qHtml === '<p><br></p>') && rawCode.value && rawCode.value.trim() !== '') {
+                  return rawCode.value;
+                }
+                return qHtml || '';
+              }
 
               function setMode(mode) {
                 if (mode === currentMode) return;
@@ -208,15 +218,7 @@
                   btnVisual.classList.add('btn-outline-light');
                   if (codeBlockBtn) codeBlockBtn.classList.add('ql-active');
 
-                  if (quillModified) {
-                    var html = quill.root.innerHTML;
-                    if (html === '<p><br></p>') {
-                      html = '';
-                    }
-                    rawCode.value = html;
-                  } else if (!rawCode.value && quill.root.innerHTML !== '<p><br></p>') {
-                    rawCode.value = quill.root.innerHTML;
-                  }
+                  rawCode.value = formatHtml(getVisualHtml());
 
                   visualContainer.style.display = 'none';
                   codeContainer.style.display = 'block';
@@ -229,7 +231,6 @@
                   if (codeBlockBtn) codeBlockBtn.classList.remove('ql-active');
 
                   quill.root.innerHTML = rawCode.value;
-                  quillModified = false;
 
                   codeContainer.style.display = 'none';
                   visualContainer.style.display = 'block';
