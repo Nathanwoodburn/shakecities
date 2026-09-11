@@ -104,6 +104,16 @@ def update_tokens(id,tokens):
     cursor.close()
     connection.close()
 
+def update_password(id, password):
+    connection = mysql.connector.connect(**dbargs)
+    cursor = connection.cursor()
+    cursor.execute("""
+        UPDATE users SET password = %s WHERE id = %s
+    """, (password, id))
+    connection.commit()
+    cursor.close()
+    connection.close()
+
 def get_website_data(domain):
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()

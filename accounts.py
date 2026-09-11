@@ -102,3 +102,18 @@ def login(email,password):
     # Update user
     db.update_tokens(user['id'], user['tokens'])
     return {'success': True, 'message': 'Logged in', 'token': token}
+
+def change_password(token, current_password, new_password):
+    user = validate_token(token)
+    if not user:
+        return {'success': False, 'message': 'Sorry we had an issue verifying your account'}
+
+    if not verify_password(current_password, user['password']):
+        return {'success': False, 'message': 'Current password is incorrect'}
+
+    if len(new_password) < 4:
+        return {'success': False, 'message': 'Your new password is not complex enough'}
+
+    hashed_password = hash_password(new_password)
+    db.update_password(user['id'], hashed_password)
+    return {'success': True, 'message': 'Password changed successfully'}

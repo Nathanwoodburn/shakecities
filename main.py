@@ -248,6 +248,63 @@ def logout():
     resp.set_cookie('token', '', expires=0)
     return resp
 
+@app.route('/account', methods=['GET', 'POST'])
+def account():
+    if 'token' not in request.cookies:
+        return redirect('/login')
+
+    token = request.cookies['token']
+    if not accounts.validate_token(token):
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+
+    user = accounts.validate_token(token)
+    if not user:
+        resp = make_response(redirect('/login'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+
+    if request.method == 'POST':
+        current_password = request.form.get('current_password', '')
+        new_password = request.form.get('new_password', '')
+        confirm_password = request.form.get('confirm_password', '')
+
+        if not current_password or not new_password or not confirm_password:
+            return error('Please fill in all password fields')
+
+        if new_password != confirm_password:
+            return error('New passwords do not match')
+
+        result = accounts.change_password(token, current_password, new_password)
+        if not result['success']:
+            return error(result['message'])
+
+        return redirect('/account?success=Password+changed+successfully')
+
+    account_val = user['email']
+    account_link = "logout"
+    account_link_name = "Logout"
+    site = user['domain'] + "." + CITY_DOMAIN
+    sld = user['domain']
+    domain = ""
+    tribe_title = "Join a tribe"
+    tribe_link = "tribe"
+
+    tribeData = db.get_user_owned_tribe(user['domain'])
+    if len(tribeData) > 0:
+        tribe_title = "Edit your tribe"
+        tribe_link = "edit_tribe"
+
+    return render_template('account.html', account=account_val, account_link=account_link,
+                           account_link_name=account_link_name, site=site,
+                           CITY_DOMAIN=CITY_DOMAIN, domain=domain, sld=sld,
+                           tribe_title=tribe_title, tribe_link=tribe_link)
+
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    return account()
+
 @app.route('/claim')
 def claim():
     # Find domain

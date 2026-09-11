@@ -58,15 +58,36 @@
     <section style="margin-top: 50px;text-align: center;">
         <h1>Welcome to ShakeCities</h1>
         <p>Congratulations your site is ready for use.<br>Your site is available at <a href="https://{{sld}}.shakecities" target="_blank">{{sld}}.shakecities/</a> <a href="https://{{sld}}.shakec" target="_blank">{{sld}}.shakec/</a> &amp; <a href="https://{{sld}}.onsc" target="_blank">{{sld}}.onsc/</a><br><br></p>
-        <div style="max-width: 10em;margin: auto;"><a class="btn btn-primary" role="button" href="https://{{site}}" style="display: block;margin: 10px;" target="_blank">Visit your site</a><a class="btn btn-primary" role="button" href="/edit" style="display: block;margin: 10px;">Edit your site</a><a class="btn btn-primary" role="button" href="/{{tribe_link}}" style="display: block;margin: 10px;">{{tribe_title}}</a><a class="btn btn-primary" role="button" href="/hnschat" style="display: block;margin: 10px;">Link HNSChat</a><a class="btn btn-primary" role="button" href="/logout" style="display: block;margin: 10px;">Logout</a></div>
+        <div style="max-width: 10em;margin: auto;"><a class="btn btn-primary" role="button" href="https://{{site}}" style="display: block;margin: 10px;" target="_blank">Visit your site</a><a class="btn btn-primary" role="button" href="/edit" style="display: block;margin: 10px;">Edit your site</a><a class="btn btn-primary" role="button" href="/{{tribe_link}}" style="display: block;margin: 10px;">{{tribe_title}}</a><a class="btn btn-primary" role="button" href="/hnschat" style="display: block;margin: 10px;">Link HNSChat</a><a class="btn btn-primary" role="button" data-bs-toggle="collapse" href="#changePassword" data-bs-target="#changePassword" aria-expanded="false" aria-controls="changePassword" style="display: block;margin: 10px;">Change Password</a><a class="btn btn-primary" role="button" href="/logout" style="display: block;margin: 10px;">Logout</a></div>
+        {% if request.args.get('success') %}
+        <div class="alert alert-success" style="width: 50%;min-width: 300px;max-width: 450px;margin: 20px auto;" role="alert">
+            {{ request.args.get('success') }}
+        </div>
+        {% endif %}
+        {% if request.args.get('error') %}
+        <div class="alert alert-danger" style="width: 50%;min-width: 300px;max-width: 450px;margin: 20px auto;" role="alert">
+            {{ request.args.get('error') }}
+        </div>
+        {% endif %}
+        <div class="collapse {% if request.args.get('error') %}show{% endif %}" id="changePassword" style="width: 50%;min-width: 300px;max-width: 450px;margin: 20px auto;">
+            <div class="card bg-dark" style="padding-bottom: 20px;">
+                <div class="card-body">
+                    <h4 class="card-title" style="color: rgb(255,255,255);">Change Password</h4>
+                </div>
+                <form style="width: 80%;margin: auto;text-align: right;" method="post" action="/account">
+                    <input class="form-control" type="password" style="margin: auto;width: 100%;margin-top: 10px;" name="current_password" placeholder="Current Password" required="">
+                    <input class="form-control" type="password" style="margin: auto;width: 100%;margin-top: 10px;" name="new_password" placeholder="New Password" required="" minlength="6">
+                    <input class="form-control" type="password" style="margin: auto;width: 100%;margin-top: 10px;" name="confirm_password" placeholder="Confirm New Password" required="" minlength="6">
+                    <input class="btn btn-primary" type="submit" value="Update Password" style="margin-top: 15px;">
+                </form>
+            </div>
+        </div>
     </section>
     <section style="margin: 20px;height: 40px;text-align: center;margin-top: 40px;">
         <footer class="text-center bg-dark"></footer>
         <div style="display: inline-block;">
             <ul class="list-inline">
                 <li class="list-inline-item me-4" style="color: rgb(255,255,255);">Copyright © ShakeCities 2023</li>
-                <li class="list-inline-item me-4"><iframe src='https://uptime.woodburn.au/api/badge/54/uptime?labelPrefix=Main+Server+' style="height:1.3em;margin-bottom:-.3em;width: 13em;"></iframe></li>
-                <li class="list-inline-item me-4"><iframe src='https://uptime.woodburn.au/api/badge/55/uptime?labelPrefix=Cities+' style="height:1.3em;margin-bottom:-.3em;width:11em;"></iframe></li>
             </ul>
         </div>
     </section>
