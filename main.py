@@ -151,7 +151,11 @@ def edit():
     hip2_display = False
 
     if 'data' in data:
-        html = data['data'].encode('utf-8').decode('unicode-escape')
+        html = data['data']
+        try:
+            html = html.encode('utf-8').decode('unicode-escape')
+        except Exception:
+            pass
     if 'HNS' in data:
         hns = data['HNS']
     if 'BTC' in data:

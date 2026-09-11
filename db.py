@@ -3,6 +3,8 @@ import os
 import dotenv
 import json
 import random
+import re
+from bs4 import BeautifulSoup
 
 dotenv.load_dotenv()
 
@@ -218,6 +220,46 @@ def update_website_wallet(domain,token,address):
     cursor.close()
     connection.close()
 
+def site_has_content(site_data):
+    if not site_data:
+        return False
+    try:
+        if isinstance(site_data, (bytes, bytearray)):
+            site_data = site_data.decode('utf-8')
+        if isinstance(site_data, str):
+            parsed = json.loads(site_data)
+        elif isinstance(site_data, dict):
+            parsed = site_data
+        else:
+            return False
+
+        if not isinstance(parsed, dict):
+            return False
+
+        html = parsed.get('data', '')
+        if not html or not isinstance(html, str):
+            return False
+
+        html = html.strip()
+        if not html:
+            return False
+
+        try:
+            html = html.encode('utf-8').decode('unicode-escape')
+        except Exception:
+            pass
+
+        try:
+            soup = BeautifulSoup(html, 'html.parser')
+            text = soup.get_text(strip=True).replace('\xa0', '').replace('&nbsp;', '')
+            has_media = bool(soup.find(['img', 'iframe', 'video', 'audio', 'svg', 'canvas', 'object', 'embed', 'table', 'hr']))
+            return bool(text or has_media)
+        except Exception:
+            clean = re.sub(r'<[^>]*>', '', html).replace('&nbsp;', '').strip()
+            return bool(clean)
+    except Exception:
+        return False
+
 def get_random_sites():
     connection = mysql.connector.connect(**dbargs)
     cursor = connection.cursor()
@@ -228,15 +270,17 @@ def get_random_sites():
     cursor.close()
     connection.close()
 
-    # Randomly pick 5
-    if len(data) > 5:
-        data = random.sample(data,5)  
-
-    names = []
+    sites_with_content = []
     for site in data:
-        names.append(site[1])
+        if site_has_content(site[2]):
+            sites_with_content.append(site[1])
 
-    return names
+    # Randomly pick up to 5
+    count = min(len(sites_with_content), 5)
+    if count > 0:
+        return random.sample(sites_with_content, count)
+
+    return []
 
 def get_tribes():
     connection = mysql.connector.connect(**dbargs)
